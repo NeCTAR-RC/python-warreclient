@@ -42,4 +42,4 @@ class FlavorManager(base.BasicManager):
                 'slots': int(slots),
                 'is_public': is_public}
 
-        return self._create("%s/" % self.base_url, data=data)
+        return self._create("/%s/" % self.base_url, data=data)

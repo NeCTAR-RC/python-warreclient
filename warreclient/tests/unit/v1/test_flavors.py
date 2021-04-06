@@ -44,3 +44,41 @@ class FlavorsTest(utils.TestCase):
                               json.dumps({'slots': 2}))
         self.assertIsInstance(flavor, flavors.Flavor)
         self.assertEqual(2, flavor.slots)
+
+    def test_create(self):
+        data = {'name': 'foo',
+                'vcpu': 20,
+                'memory_mb': 30,
+                'disk_gb': 40,
+                'description': 'foobar',
+                'active': False,
+                'properties': 'foo=bar',
+                'max_length_hours': 24,
+                'slots': 7,
+                'is_public': False}
+
+        flavor = self.cs.flavors.create(**data)
+        json_data = json.dumps(data)
+        self.cs.assert_called('POST', '/v1/flavors/',
+                              data=json_data)
+        self.assertIsInstance(flavor, flavors.Flavor)
+
+    def test_create_defaults(self):
+        defaults = {
+            'description': None,
+            'active': True,
+            'properties': None,
+            'max_length_hours': 504,
+            'slots': 1,
+            'is_public': True}
+
+        data = {'name': 'foo',
+                'vcpu': 20,
+                'memory_mb': 30,
+                'disk_gb': 40}
+        flavor = self.cs.flavors.create(**data)
+        data.update(defaults)
+        json_data = json.dumps(data)
+        self.cs.assert_called('POST', '/v1/flavors/',
+                              data=json_data)
+        self.assertIsInstance(flavor, flavors.Flavor)

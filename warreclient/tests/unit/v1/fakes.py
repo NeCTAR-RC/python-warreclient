@@ -50,6 +50,18 @@ generic_flavor = {
 }
 
 
+generic_reservation = {
+    "user_id": "c0645ff94b864d3d84c438d9855f9cea",
+    "id": "17664847-0aa0-4a2b-9fe4-073b922914e5",
+    "lease_id": None,
+    "status": "PENDING_CREATE",
+    "end": "2021-04-04T01:00:00",
+    "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+    "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+    "start": "2021-04-04T00:00:00"
+}
+
+
 class FakeClient(fakes.FakeClient, client.Client):
 
     def __init__(self, *args, **kwargs):
@@ -176,3 +188,38 @@ class FakeSessionClient(base_client.SessionClient):
                 "active": True,
                 "description": "Desc 2"
             })
+
+    def post_v1_flavors(self, **kw):
+        return (200, {}, generic_flavor)
+
+    def get_v1_reservations(self, **kw):
+        reservations = [
+            {"user_id": "c0645ff94b864d3d84c438d9855f9cea",
+             "id": "17664847-0aa0-4a2b-9fe4-073b922914e5",
+             "lease_id": None,
+             "status": "PENDING_CREATE",
+             "end": "2021-04-04T01:00:00",
+             "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+             "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+             "start": "2021-04-04T00:00:00",
+            },
+            {"user_id": "c0645ff94b864d3d84c438d9855f9cea",
+             "id": "17664847-0aa0-4a2b-9fe4-073b922914e6",
+             "lease_id": "987d558c-3ac3-4bc0-962a-aeb1fbebf5ba",
+             "status": "ALLOCATED",
+             "end": "2021-04-04T01:00:00",
+             "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+             "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+             "start": "2021-04-04T00:00:00",
+            }
+        ]
+        return (200, {}, reservations)
+
+    def get_v1_reservations_123(self, **kw):
+        return (200, {}, generic_reservation)
+
+    def post_v1_reservations(self, **kw):
+        return (200, {}, generic_reservation)
+
+    def delete_v1_reservations_123(self, **kw):
+        return (204, {}, '')

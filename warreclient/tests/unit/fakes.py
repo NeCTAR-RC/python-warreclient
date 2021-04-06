@@ -17,6 +17,8 @@ wrong the tests might raise AssertionError. I've indicated in comments the
 places where actual behavior differs from the spec.
 """
 
+import json
+
 from warreclient import base
 
 # fake request id
@@ -88,10 +90,12 @@ class FakeClient(object):
               'calls': '\n'.join(str(c) for c in self.http_client.callstack)})
 
         if data is not None:
-            if self.http_client.callstack[pos][2] != data:
+            actual = json.loads(self.http_client.callstack[pos][2])
+            expected = json.loads(data)
+            if actual != expected:
                 raise AssertionError('%r != %r' %
-                                     (self.http_client.callstack[pos][2],
-                                      data))
+                                     (actual,
+                                      expected))
         if params is not None:
             if self.http_client.callstack[pos][3] != params:
                 raise AssertionError('%r != %r' %

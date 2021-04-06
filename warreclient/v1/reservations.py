@@ -34,4 +34,4 @@ class ReservationManager(base.BasicManager):
         data = {'flavor_id': flavor_id,
                 'start': start,
                 'end': end}
-        return self._create("%s/" % self.base_url, data=data)
+        return self._create("/%s/" % self.base_url, data=data)
