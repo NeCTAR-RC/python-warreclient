@@ -23,7 +23,7 @@ class Client(object):
     :type session: :py:class:`keystoneauth.adapter.Adapter`
     """
 
-    def __init__(self, session=None, service_type='warre', **kwargs):
+    def __init__(self, session=None, service_type='nectar-reservation', **kwargs):
         """Initialize a new client for the Warre v1 API."""
         if session is None:
             raise exceptions.ClientException(
