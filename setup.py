@@ -17,13 +17,14 @@ entry_points = {
         'warre flavor show = warreclient.osc.v1.flavors:ShowFlavor',
         'warre flavor create = warreclient.osc.v1.flavors:CreateFlavor',
         'warre flavor set = warreclient.osc.v1.flavors:UpdateFlavor',
+        'warre flavor free-slots = warreclient.osc.v1.flavors:FlavorSlots',
     ]
 }
 
 
 setuptools.setup(
     name='warreclient',
-    version='0.1.0',
+    version='0.2.0',
     description=('Client for the Warre system'),
     author='Sam Morrison',
     author_email='sorrison@gmail.com',

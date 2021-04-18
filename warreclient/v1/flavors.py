@@ -11,6 +11,8 @@
 #   under the License.
 #
 
+import datetime
+
 from warreclient import base
 
 
@@ -27,6 +29,14 @@ class FlavorManager(base.BasicManager):
     def update(self, flavor_id, **kwargs):
         return self._update('/%s/%s/' % (self.base_url, flavor_id),
                             data=kwargs)
+
+    def free_slots(self, flavor_id, start=None, end=None):
+        if start is None:
+            start = datetime.date.today()
+        if end is None:
+            end = start + datetime.timedelta(days=30)
+        return self._list('/%s/%s/free-slots/?start=%s&end=%s' % (
+            self.base_url, flavor_id, start, end), obj_class=None)
 
     def create(self, name, vcpu, memory_mb, disk_gb, description=None,
                active=True, properties=None, max_length_hours=504, slots=1,
