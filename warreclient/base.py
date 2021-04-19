@@ -47,7 +47,8 @@ class Manager(object):
         self.api = api
 
     def _list(self, url, response_key='results', obj_class=None,
-              items=None, headers=None, params=None, limit=None):
+              items=None, headers=None, params=None, limit=None,
+              raw=False):
 
         if items is None:
             items = []
@@ -63,7 +64,7 @@ class Manager(object):
         else:
             data = body
 
-        if all([isinstance(res, six.string_types) for res in data]):
+        if raw or all([isinstance(res, six.string_types) for res in data]):
             new_items = data
         else:
             new_items = [obj_class(self, res, loaded=True)

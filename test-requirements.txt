@@ -5,3 +5,4 @@ requests-mock
 testtools
 stestr
 mock
+freezegun
