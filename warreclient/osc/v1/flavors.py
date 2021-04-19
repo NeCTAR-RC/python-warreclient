@@ -237,3 +237,28 @@ class UpdateFlavor(FlavorCommand):
         flavor = client.flavors.update(flavor_id=parsed_args.id, **data)
         flavor_dict = flavor.to_dict()
         return self.dict2columns(flavor_dict)
+
+
+class FlavorSlots(command.Lister):
+    """Show flavor free slots."""
+
+    log = logging.getLogger(__name__ + '.FlavorSlots')
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        slots = client.flavors.free_slots(parsed_args.id)
+        columns = ['start', 'end']
+        return (
+            columns,
+            (osc_utils.get_dict_properties(q, columns) for q in slots)
+        )
+
+    def get_parser(self, prog_name):
+        parser = super(command.Lister, self).get_parser(prog_name)
+        parser.add_argument(
+            'id',
+            metavar='<id>',
+            help=('ID of flavor')
+        )
+        return parser

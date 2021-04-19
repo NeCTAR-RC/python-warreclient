@@ -17,6 +17,7 @@ entry_points = {
         'warre flavor show = warreclient.osc.v1.flavors:ShowFlavor',
         'warre flavor create = warreclient.osc.v1.flavors:CreateFlavor',
         'warre flavor set = warreclient.osc.v1.flavors:UpdateFlavor',
+        'warre flavor free-slots = warreclient.osc.v1.flavors:FlavorSlots',
     ]
 }
 
