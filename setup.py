@@ -21,6 +21,7 @@ entry_points = {
         'warre flavor access grant = warreclient.osc.v1.flavors:GrantAccess',
         'warre flavor access revoke = warreclient.osc.v1.flavors:RevokeAccess',
         'warre flavor access list = warreclient.osc.v1.flavors:ListAccess',
+        'warre flavor free-slots = warreclient.osc.v1.flavors:FlavorSlots',
     ]
 }
 
