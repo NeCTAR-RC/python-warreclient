@@ -256,6 +256,7 @@ class DeleteFlavor(FlavorCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
+
         try:
             client.flavors.delete(parsed_args.id)
         except exceptions.NotFound as ex:
@@ -351,3 +352,28 @@ class ListAccess(command.Lister):
             columns,
             (osc_utils.get_item_properties(q, columns) for q in flavorprojects)
         )
+
+
+class FlavorSlots(command.Lister):
+    """Show flavor free slots."""
+
+    log = logging.getLogger(__name__ + '.FlavorSlots')
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        slots = client.flavors.free_slots(parsed_args.id)
+        columns = ['start', 'end']
+        return (
+            columns,
+            (osc_utils.get_dict_properties(q, columns) for q in slots)
+        )
+
+    def get_parser(self, prog_name):
+        parser = super(command.Lister, self).get_parser(prog_name)
+        parser.add_argument(
+            'id',
+            metavar='<id>',
+            help=('ID of flavor')
+        )
+        return parser
