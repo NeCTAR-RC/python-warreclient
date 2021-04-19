@@ -188,6 +188,10 @@ class FakeSessionClient(base_client.SessionClient):
     def get_v1_flavors_123(self, **kw):
         return (200, {}, generic_flavor)
 
+    def get_v1_flavors_123_freeslots(self, **kw):
+        return (200, {}, [{"end": "2021-06-18T00:00:00",
+                           "start": "2021-05-19T00:00:00"}])
+
     def patch_v1_flavors_123(self, data, **kw):
         return (202, {'slots': 2},
             {

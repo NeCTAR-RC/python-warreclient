@@ -11,14 +11,17 @@
 #   under the License.
 #
 
+import datetime
 import json
 
-from warreclient.v1 import flavors
+from freezegun import freeze_time
 
 from warreclient.tests.unit import utils
 from warreclient.tests.unit.v1 import fakes
+from warreclient.v1 import flavors
 
 
+@freeze_time("2021-05-19")
 class FlavorsTest(utils.TestCase):
 
     def setUp(self):
@@ -88,3 +91,36 @@ class FlavorsTest(utils.TestCase):
     def test_delete(self):
         self.cs.flavors.delete(123)
         self.cs.assert_called('DELETE', '/v1/flavors/123/')
+
+    def test_free_slots(self):
+        free_slots = self.cs.flavors.free_slots(123)
+        self.cs.assert_called(
+            'GET',
+            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-06-18')
+        self.assertIsInstance(free_slots, list)
+        self.assertIsInstance(free_slots[0], dict)
+        self.assertEqual((['end', 'start']), list(free_slots[0].keys()))
+
+    def test_free_slots_end(self):
+        self.cs.flavors.free_slots(123, end='2021-09-01')
+        self.cs.assert_called(
+            'GET',
+            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-09-01')
+
+    def test_free_slots_end_date(self):
+        self.cs.flavors.free_slots(123, end=datetime.date(2021, 8, 31))
+        self.cs.assert_called(
+            'GET',
+            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-08-31')
+
+    def test_free_slots_start(self):
+        self.cs.flavors.free_slots(123, start='2021-07-01')
+        self.cs.assert_called(
+            'GET',
+            '/v1/flavors/123/freeslots/?start=2021-07-01&end=2021-07-31')
+
+    def test_free_slots_start_date(self):
+        self.cs.flavors.free_slots(123, start=datetime.date(2021, 7, 1))
+        self.cs.assert_called(
+            'GET',
+            '/v1/flavors/123/freeslots/?start=2021-07-01&end=2021-07-31')
