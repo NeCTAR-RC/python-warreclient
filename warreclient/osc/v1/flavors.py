@@ -135,6 +135,13 @@ class CreateFlavor(command.ShowOne):
             default=False,
             help="Flavor is private (default: false)"
         )
+        parser.add_argument(
+            '--extra-specs',
+            metavar='<extra_specs>',
+            default={},
+            help='A dictionary of extra Specs for the flavor'
+        )
+
         return parser
 
     def take_action(self, parsed_args):
@@ -146,15 +153,16 @@ class CreateFlavor(command.ShowOne):
         active = not parsed_args.disable
 
         fields = {'name': parsed_args.name,
-                'vcpu': parsed_args.vcpu,
-                'memory_mb': parsed_args.memory,
-                'disk_gb': parsed_args.disk,
-                'description': parsed_args.description,
-                'active': active,
-                'properties': parsed_args.properties,
-                'max_length_hours': parsed_args.max_length_hours,
-                'slots': parsed_args.slots,
-                'is_public': is_public}
+                  'vcpu': parsed_args.vcpu,
+                  'memory_mb': parsed_args.memory,
+                  'disk_gb': parsed_args.disk,
+                  'description': parsed_args.description,
+                  'active': active,
+                  'properties': parsed_args.properties,
+                  'max_length_hours': parsed_args.max_length_hours,
+                  'slots': parsed_args.slots,
+                  'is_public': is_public,
+                  'extra_specs': parsed_args.extra_specs}
 
         flavor = client.flavors.create(**fields)
         flavor_dict = flavor.to_dict()

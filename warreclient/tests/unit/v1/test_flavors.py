@@ -55,7 +55,8 @@ class FlavorsTest(utils.TestCase):
                 'properties': 'foo=bar',
                 'max_length_hours': 24,
                 'slots': 7,
-                'is_public': False}
+                'is_public': False,
+                'extra_specs': {'foo': 'bar', 'bar': 'foo'}}
 
         flavor = self.cs.flavors.create(**data)
         json_data = json.dumps(data)
@@ -70,7 +71,8 @@ class FlavorsTest(utils.TestCase):
             'properties': None,
             'max_length_hours': 504,
             'slots': 1,
-            'is_public': True}
+            'is_public': True,
+            'extra_specs': {}}
 
         data = {'name': 'foo',
                 'vcpu': 20,

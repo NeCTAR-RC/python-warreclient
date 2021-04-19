@@ -30,7 +30,7 @@ class FlavorManager(base.BasicManager):
 
     def create(self, name, vcpu, memory_mb, disk_gb, description=None,
                active=True, properties=None, max_length_hours=504, slots=1,
-               is_public=True):
+               is_public=True, extra_specs={}):
         data = {'name': name,
                 'description': description,
                 'vcpu': int(vcpu),
@@ -40,6 +40,7 @@ class FlavorManager(base.BasicManager):
                 'active': active,
                 'max_length_hours': int(max_length_hours),
                 'slots': int(slots),
-                'is_public': is_public}
+                'is_public': is_public,
+                'extra_specs': extra_specs}
 
         return self._create("/%s/" % self.base_url, data=data)

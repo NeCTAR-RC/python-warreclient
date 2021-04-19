@@ -46,7 +46,8 @@ generic_flavor = {
     "is_public": True,
     "disk_gb": 30,
     "active": True,
-    "description": "Desc 2"
+    "description": "Desc 2",
+    "extra_specs": {},
 }
 
 
@@ -152,7 +153,8 @@ class FakeSessionClient(base_client.SessionClient):
                 "is_public": False,
                 "disk_gb": 30,
                 "active": False,
-                "description": "Desc 1"
+                "description": "Desc 1",
+                "extra_specs": {},
             },
             {
                 "name": "s2.small",
@@ -165,7 +167,8 @@ class FakeSessionClient(base_client.SessionClient):
                 "is_public": True,
                 "disk_gb": 30,
                 "active": True,
-                "description": "Desc 2"
+                "description": "Desc 2",
+                "extra_specs": {},
             }
         ]
         return (200, {}, flavors)
