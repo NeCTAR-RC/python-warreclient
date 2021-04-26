@@ -12,7 +12,11 @@
 
 import re
 
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
 from six.moves.urllib import parse
 
 from warreclient import client as base_client
