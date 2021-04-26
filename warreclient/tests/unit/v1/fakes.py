@@ -12,7 +12,7 @@
 
 import re
 
-import mock
+from unittest import mock
 from six.moves.urllib import parse
 
 from warreclient import client as base_client
