@@ -195,6 +195,10 @@ class FakeSessionClient(base_client.SessionClient):
     def post_v1_flavors(self, **kw):
         return (200, {}, generic_flavor)
 
+    def delete_v1_flavors_123(self, **kw):
+        return (204, {}, '')
+
+
     def get_v1_reservations(self, **kw):
         reservations = [
             {"user_id": "c0645ff94b864d3d84c438d9855f9cea",
