@@ -28,6 +28,9 @@ class FlavorManager(base.BasicManager):
         return self._update('/%s/%s/' % (self.base_url, flavor_id),
                             data=kwargs)
 
+    def delete(self, flavor_id):
+        return self._delete('/%s/%s/' % (self.base_url, flavor_id))
+
     def create(self, name, vcpu, memory_mb, disk_gb, description=None,
                active=True, properties=None, max_length_hours=504, slots=1,
                is_public=True, extra_specs={}):

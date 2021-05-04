@@ -84,3 +84,7 @@ class FlavorsTest(utils.TestCase):
         self.cs.assert_called('POST', '/v1/flavors/',
                               data=json_data)
         self.assertIsInstance(flavor, flavors.Flavor)
+
+    def test_delete(self):
+        self.cs.flavors.delete(123)
+        self.cs.assert_called('DELETE', '/v1/flavors/123/')
