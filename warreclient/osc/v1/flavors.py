@@ -245,3 +245,19 @@ class UpdateFlavor(FlavorCommand):
         flavor = client.flavors.update(flavor_id=parsed_args.id, **data)
         flavor_dict = flavor.to_dict()
         return self.dict2columns(flavor_dict)
+
+
+class DeleteFlavor(FlavorCommand):
+    """Delete flavor."""
+
+    log = logging.getLogger(__name__ + '.DeleteFlavor')
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        try:
+            client.flavors.delete(parsed_args.id)
+        except exceptions.NotFound as ex:
+            raise exceptions.CommandError(str(ex))
+
+        return [], []
