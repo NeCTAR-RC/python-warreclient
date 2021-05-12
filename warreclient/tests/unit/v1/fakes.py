@@ -24,6 +24,7 @@ from warreclient.tests.unit import fakes
 from warreclient.tests.unit import utils
 from warreclient.v1 import client
 from warreclient.v1 import flavors
+from warreclient.v1 import flavorprojects
 from warreclient.v1 import reservations
 
 
@@ -54,6 +55,11 @@ generic_flavor = {
     "extra_specs": {},
 }
 
+generic_flavorproject = {
+    "id": "b719aadd-9340-40e9-88d0-702836c6f592",
+    "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+    "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+}
 
 generic_reservation = {
     "user_id": "c0645ff94b864d3d84c438d9855f9cea",
@@ -73,6 +79,8 @@ class FakeClient(fakes.FakeClient, client.Client):
         client.Client.__init__(self, session=mock.Mock())
         self.http_client = FakeSessionClient(**kwargs)
         self.flavors = flavors.FlavorManager(self.http_client)
+        self.flavorprojects = flavorprojects.FlavorProjectManager(
+            self.http_client)
         self.reservations = reservations.ReservationManager(self.http_client)
 
 
@@ -201,6 +209,27 @@ class FakeSessionClient(base_client.SessionClient):
 
     def delete_v1_flavors_123(self, **kw):
         return (204, {}, '')
+
+    def get_v1_flavorprojects(self, **kw):
+        flavorprojects = [
+            {
+                "id": "b719aadd-9340-40e9-88d0-702836c6f592",
+                "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+                "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+            },
+            {
+                "id": "8ba07d79-8c64-4dab-926b-aaeef0fde5af",
+                "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+                "flavor": "41c33436-dfe5-4caf-9560-f14e493f5f88",
+            }
+        ]
+        return (200, {}, flavorprojects)
+
+    def delete_v1_flavorprojects_123(self, **kw):
+        return (204, {}, '')
+
+    def post_v1_flavorprojects(self, **kw):
+        return (200, {}, generic_flavorproject)
 
     def get_v1_reservations(self, **kw):
         reservations = [
