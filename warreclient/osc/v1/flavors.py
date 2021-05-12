@@ -28,7 +28,8 @@ class ListFlavors(command.Lister):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
         flavors = client.flavors.list()
-        columns = ['id', 'name', 'active', 'is_public']
+        columns = ['id', 'name', 'memory_mb', 'disk_gb', 'vcpu',
+                   'active', 'is_public']
         return (
             columns,
             (osc_utils.get_item_properties(q, columns) for q in flavors)
@@ -261,3 +262,92 @@ class DeleteFlavor(FlavorCommand):
             raise exceptions.CommandError(str(ex))
 
         return [], []
+
+
+class GrantAccess(command.ShowOne):
+    """Grant access to a flavor."""
+
+    log = logging.getLogger(__name__ + '.GrantAccess')
+
+    def get_parser(self, prog_name):
+        parser = super(GrantAccess, self).get_parser(prog_name)
+        parser.add_argument(
+            'flavor_id',
+            metavar='<flavor_id>',
+            help='Flavor ID'
+        )
+        parser.add_argument(
+            'project_id',
+            metavar='<project_id>',
+            help='Project ID'
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+
+        client = self.app.client_manager.warre
+
+        fields = {'flavor_id': parsed_args.flavor_id,
+                  'project_id': parsed_args.project_id}
+
+        flavorproject = client.flavorprojects.create(**fields)
+        fp_dict = flavorproject.to_dict()
+        return self.dict2columns(fp_dict)
+
+
+class RevokeAccess(command.ShowOne):
+    """Revokes access to a flavor."""
+
+    log = logging.getLogger(__name__ + '.RevokeAccess')
+
+    def get_parser(self, prog_name):
+        parser = super(RevokeAccess, self).get_parser(prog_name)
+        parser.add_argument(
+            'id',
+            metavar='<id>',
+            help='Access ID'
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        try:
+            client.flavorprojects.delete(parsed_args.id)
+        except exceptions.NotFound as ex:
+            raise exceptions.CommandError(str(ex))
+
+        return [], []
+
+
+class ListAccess(command.Lister):
+    """List flavors."""
+
+    log = logging.getLogger(__name__ + '.ListAccess')
+
+    def get_parser(self, prog_name):
+        parser = super(ListAccess, self).get_parser(prog_name)
+        parser.add_argument(
+            '--flavor-id',
+            default=None,
+            metavar='<flavor_id>',
+            help='Filter by Flavor ID'
+        )
+        parser.add_argument(
+            '--project-id',
+            default=None,
+            metavar='<project_id>',
+            help='Filter by Project ID'
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        flavorprojects = client.flavorprojects.list()
+        columns = ['id', 'flavor', 'project_id']
+        return (
+            columns,
+            (osc_utils.get_item_properties(q, columns) for q in flavorprojects)
+        )
