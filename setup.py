@@ -18,13 +18,16 @@ entry_points = {
         'warre flavor create = warreclient.osc.v1.flavors:CreateFlavor',
         'warre flavor delete = warreclient.osc.v1.flavors:DeleteFlavor',
         'warre flavor set = warreclient.osc.v1.flavors:UpdateFlavor',
+        'warre flavor access grant = warreclient.osc.v1.flavors:GrantAccess',
+        'warre flavor access revoke = warreclient.osc.v1.flavors:RevokeAccess',
+        'warre flavor access list = warreclient.osc.v1.flavors:ListAccess',
     ]
 }
 
 
 setuptools.setup(
     name='warreclient',
-    version='0.2.0',
+    version='0.3.0',
     description=('Client for the Warre system'),
     author='Sam Morrison',
     author_email='sorrison@gmail.com',
