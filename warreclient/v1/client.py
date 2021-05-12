@@ -13,6 +13,7 @@
 
 from warreclient import client
 from warreclient import exceptions
+from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
 from warreclient.v1 import reservations
 
@@ -31,5 +32,7 @@ class Client(object):
                 message='Session is required argument')
         self.http_client = client.SessionClient(
             session, service_type=service_type, **kwargs)
+        self.flavorprojects = flavorprojects.FlavorProjectManager(
+            self.http_client)
         self.flavors = flavors.FlavorManager(self.http_client)
         self.reservations = reservations.ReservationManager(self.http_client)
