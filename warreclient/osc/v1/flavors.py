@@ -346,7 +346,9 @@ class ListAccess(command.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
-        flavorprojects = client.flavorprojects.list()
+
+        flavorprojects = client.flavorprojects.list(
+            flavor_id=parsed_args.flavor_id, project_id=parsed_args.project_id)
         columns = ['id', 'flavor', 'project_id']
         return (
             columns,
