@@ -27,13 +27,26 @@ class ListFlavors(command.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
-        flavors = client.flavors.list()
+        kwargs = {}
+        if parsed_args.all:
+            kwargs['all_projects'] = True
+        flavors = client.flavors.list(**kwargs)
         columns = ['id', 'name', 'memory_mb', 'disk_gb', 'vcpu',
                    'active', 'is_public']
         return (
             columns,
             (osc_utils.get_item_properties(q, columns) for q in flavors)
         )
+
+    def get_parser(self, prog_name):
+        parser = super(ListFlavors, self).get_parser(prog_name)
+        parser.add_argument(
+            '--all',
+            action='store_true',
+            default=False,
+            help="List all flavors"
+        )
+        return parser
 
 
 class FlavorCommand(command.ShowOne):
