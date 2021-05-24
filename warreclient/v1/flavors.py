@@ -12,6 +12,7 @@
 #
 
 import datetime
+import json
 
 from warreclient import base
 
@@ -46,6 +47,7 @@ class FlavorManager(base.BasicManager):
     def create(self, name, vcpu, memory_mb, disk_gb, description=None,
                active=True, properties=None, max_length_hours=504, slots=1,
                is_public=True, extra_specs={}):
+
         data = {'name': name,
                 'description': description,
                 'vcpu': int(vcpu),

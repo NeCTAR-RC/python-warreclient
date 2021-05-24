@@ -12,6 +12,7 @@
 #
 
 import logging
+import json
 
 from osc_lib.command import command
 from osc_lib import utils as osc_utils
@@ -166,6 +167,11 @@ class CreateFlavor(command.ShowOne):
         is_public = not parsed_args.private
         active = not parsed_args.disable
 
+        try:
+            extra_specs = json.loads(parsed_args.extra_specs)
+        except json.JSONDecodeError:
+            raise exceptions.CommandError("Extra specs not valid json")
+
         fields = {'name': parsed_args.name,
                   'vcpu': parsed_args.vcpu,
                   'memory_mb': parsed_args.memory,
@@ -176,7 +182,7 @@ class CreateFlavor(command.ShowOne):
                   'max_length_hours': parsed_args.max_length_hours,
                   'slots': parsed_args.slots,
                   'is_public': is_public,
-                  'extra_specs': parsed_args.extra_specs}
+                  'extra_specs': extra_specs}
 
         flavor = client.flavors.create(**fields)
         flavor_dict = flavor.to_dict()
