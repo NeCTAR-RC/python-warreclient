@@ -156,6 +156,20 @@ class CreateFlavor(command.ShowOne):
             default={},
             help='A dictionary of extra Specs for the flavor'
         )
+        parser.add_argument(
+            '--start',
+            metavar='<start>',
+            default=None,
+            help='Start time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+                 'restrict when a flavor can be used',
+        )
+        parser.add_argument(
+            '--end',
+            metavar='<end>',
+            default=None,
+            help='End time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+                'restrict when a flavor can be used',
+        )
 
         return parser
 
@@ -184,7 +198,9 @@ class CreateFlavor(command.ShowOne):
                   'max_length_hours': parsed_args.max_length_hours,
                   'slots': parsed_args.slots,
                   'is_public': is_public,
-                  'extra_specs': extra_specs}
+                  'extra_specs': extra_specs,
+                  'start': parsed_args.start,
+                  'end': parsed_args.end}
 
         flavor = client.flavors.create(**fields)
         flavor_dict = flavor.to_dict()

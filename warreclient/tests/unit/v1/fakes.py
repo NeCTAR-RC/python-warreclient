@@ -53,6 +53,8 @@ generic_flavor = {
     "active": True,
     "description": "Desc 2",
     "extra_specs": {},
+    "end": "2021-04-04T01:00:00",
+    "start": "2021-04-04T00:00:00",
 }
 
 generic_flavorproject = {
