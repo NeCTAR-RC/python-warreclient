@@ -17,6 +17,9 @@ from warreclient import base
 
 
 class Flavor(base.Resource):
+
+    date_fields = ['start', 'end']
+
     def __repr__(self):
         return "<Flavor %s>" % self.attributes.get('id')
 
@@ -45,7 +48,7 @@ class FlavorManager(base.BasicManager):
 
     def create(self, name, vcpu, memory_mb, disk_gb, description=None,
                active=True, properties=None, max_length_hours=504, slots=1,
-               is_public=True, extra_specs={}):
+               is_public=True, extra_specs={}, start=None, end=None):
 
         data = {'name': name,
                 'description': description,
@@ -57,6 +60,8 @@ class FlavorManager(base.BasicManager):
                 'max_length_hours': int(max_length_hours),
                 'slots': int(slots),
                 'is_public': is_public,
-                'extra_specs': extra_specs}
+                'extra_specs': extra_specs,
+                'start': start,
+                'end': end}
 
         return self._create("/%s/" % self.base_url, data=data)
