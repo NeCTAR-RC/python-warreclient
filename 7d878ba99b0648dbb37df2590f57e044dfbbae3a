@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a1f60bf_6fab502b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2021-06-01T22:50:44Z",
+      "side": 1,
+      "message": "looks good, 1 comment",
+      "revId": "7d878ba99b0648dbb37df2590f57e044dfbbae3a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3500d63c_8c615e2e",
+        "filename": "warreclient/osc/v1/flavors.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2021-06-01T22:50:44Z",
+      "side": 1,
+      "message": "should this read \u0027YYYY-MM-DDTHH:MM[:SS]\u0027 to match usage in fakes.py/test_flavors.py ?",
+      "revId": "7d878ba99b0648dbb37df2590f57e044dfbbae3a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
+    }
+  ]
+}
