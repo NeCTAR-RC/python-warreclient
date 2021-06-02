@@ -168,7 +168,9 @@ class CreateFlavor(command.ShowOne):
         active = not parsed_args.disable
 
         try:
-            extra_specs = json.loads(parsed_args.extra_specs)
+            extra_specs = json.loads(parsed_args.extra_specs) \
+                if parsed_args.extra_specs else parsed_args.extra_specs
+
         except json.JSONDecodeError:
             raise exceptions.CommandError("Extra specs not valid json")
 
