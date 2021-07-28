@@ -88,6 +88,13 @@ class CreateReservation(command.ShowOne):
             help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease '
                  '(default: 24h from now)',
         )
+        parser.add_argument(
+            '--instance-count',
+            metavar='<instance-count>',
+            type=int,
+            default=1,
+            help="Number of instances (Default: 1)"
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -96,7 +103,8 @@ class CreateReservation(command.ShowOne):
         client = self.app.client_manager.warre
         fields = {'flavor_id': parsed_args.flavor,
                   'start': parsed_args.start,
-                  'end': parsed_args.end}
+                  'end': parsed_args.end,
+                  'instance_count': parsed_args.instnace_count}
 
         reservation = client.reservations.create(**fields)
         reservation_dict = reservation.to_dict()

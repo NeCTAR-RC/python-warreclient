@@ -41,7 +41,8 @@ class ReservationsTest(utils.TestCase):
     def test_create(self):
         data = {'flavor_id': '987d558c-3ac3-4bc0-962a-aeb1fbebf5bb',
                 'start': '2021-04-04T00:00:00',
-                'end': '2021-04-04T01:00:00'}
+                'end': '2021-04-04T01:00:00',
+                'instance_count': 2}
 
         reservation = self.cs.reservations.create(**data)
         json_data = json.dumps(data)
