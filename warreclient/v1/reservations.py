@@ -30,8 +30,9 @@ class ReservationManager(base.BasicManager):
     def delete(self, reservation_id):
         return self._delete('/%s/%s/' % (self.base_url, reservation_id))
 
-    def create(self, flavor_id, start, end):
+    def create(self, flavor_id, start, end, instance_count=1):
         data = {'flavor_id': flavor_id,
                 'start': start,
-                'end': end}
+                'end': end,
+                'instance_count': instance_count}
         return self._create("/%s/" % self.base_url, data=data)
