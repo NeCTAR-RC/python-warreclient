@@ -26,7 +26,7 @@ def Client(version, *args, **kwargs):
 class SessionClient(adapter.Adapter):
 
     client_name = 'python-warreclient'
-    client_version = '0.8.0'
+    client_version = '0.8.1'
 
     def request(self, url, method, **kwargs):
         kwargs.setdefault('headers', kwargs.get('headers', {}))

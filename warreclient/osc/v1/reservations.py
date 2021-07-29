@@ -104,7 +104,7 @@ class CreateReservation(command.ShowOne):
         fields = {'flavor_id': parsed_args.flavor,
                   'start': parsed_args.start,
                   'end': parsed_args.end,
-                  'instance_count': parsed_args.instnace_count}
+                  'instance_count': parsed_args.instance_count}
 
         reservation = client.reservations.create(**fields)
         reservation_dict = reservation.to_dict()
