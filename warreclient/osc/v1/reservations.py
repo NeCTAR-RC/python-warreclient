@@ -24,10 +24,23 @@ class ListReservations(command.Lister):
 
     log = logging.getLogger(__name__ + '.ListReservations')
 
+    def get_parser(self, prog_name):
+        parser = super(ListReservations, self).get_parser(prog_name)
+        parser.add_argument(
+            '--all-projects',
+            action='store_true',
+            default=False,
+            help="List all projects reservations (admin only)"
+        )
+        return parser
+
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
-        reservations = client.reservations.list()
+        kwargs = {}
+        if parsed_args.all_projects:
+            kwargs['all_projects'] = True
+        reservations = client.reservations.list(**kwargs)
         columns = ['id', 'status', 'flavor', 'start', 'end']
         return (
             columns,
