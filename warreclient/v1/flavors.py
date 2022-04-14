@@ -21,7 +21,7 @@ class Flavor(base.Resource):
     date_fields = ['start', 'end']
 
     def __repr__(self):
-        return "<Flavor %s>" % self.attributes.get('id')
+        return "<Flavor %s>" % self.id
 
 
 class FlavorManager(base.BasicManager):

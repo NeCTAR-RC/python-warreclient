@@ -12,14 +12,24 @@
 #
 
 from warreclient import base
+from warreclient.v1 import flavors
 
 
 class Reservation(base.Resource):
 
     date_fields = ['start', 'end']
 
+    def __init__(self, manager, info, loaded=False, resp=None):
+        super(Reservation, self).__init__(manager, info, loaded, resp)
+        self.flavor = flavors.Flavor(None, self.flavor, loaded=True)
+
     def __repr__(self):
         return "<Reservation %s>" % self.id
+
+    def to_dict(self):
+        res = super(Reservation, self).to_dict()
+        res['flavor'] = res.get('flavor', {}).get('name')
+        return res
 
 
 class ReservationManager(base.BasicManager):

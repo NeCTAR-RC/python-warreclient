@@ -69,7 +69,7 @@ generic_reservation = {
     "lease_id": None,
     "status": "PENDING_CREATE",
     "end": "2021-04-04T01:00:00",
-    "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+    "flavor": generic_flavor,
     "project_id": "9427903ca1544f0795ba4117d55ed9b2",
     "start": "2021-04-04T00:00:00"
 }
@@ -244,7 +244,7 @@ class FakeSessionClient(base_client.SessionClient):
              "lease_id": None,
              "status": "PENDING_CREATE",
              "end": "2021-04-04T01:00:00",
-             "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+             "flavor": generic_flavor,
              "project_id": "9427903ca1544f0795ba4117d55ed9b2",
              "start": "2021-04-04T00:00:00",
             },
@@ -253,7 +253,7 @@ class FakeSessionClient(base_client.SessionClient):
              "lease_id": "987d558c-3ac3-4bc0-962a-aeb1fbebf5ba",
              "status": "ALLOCATED",
              "end": "2021-04-04T01:00:00",
-             "flavor": "987d558c-3ac3-4bc0-962a-aeb1fbebf5bb",
+             "flavor": generic_flavor,
              "project_id": "9427903ca1544f0795ba4117d55ed9b2",
              "start": "2021-04-04T00:00:00",
             }

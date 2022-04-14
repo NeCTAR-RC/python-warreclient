@@ -13,6 +13,7 @@
 
 import json
 
+from warreclient.v1 import flavors
 from warreclient.v1 import reservations
 
 from warreclient.tests.unit import utils
@@ -37,6 +38,7 @@ class ReservationsTest(utils.TestCase):
         self.cs.assert_called('GET', '/v1/reservations/123/')
         self.assertIsInstance(u, reservations.Reservation)
         self.assertEqual('17664847-0aa0-4a2b-9fe4-073b922914e5', u.id)
+        self.assertIsInstance(u.flavor, flavors.Flavor)
 
     def test_create(self):
         data = {'flavor_id': '987d558c-3ac3-4bc0-962a-aeb1fbebf5bb',
@@ -53,3 +55,8 @@ class ReservationsTest(utils.TestCase):
     def test_delete(self):
         self.cs.reservations.delete(123)
         self.cs.assert_called('DELETE', '/v1/reservations/123/')
+
+    def test_reservation_to_dict(self):
+        reservation = self.cs.reservations.get(123)
+        res_dict = reservation.to_dict()
+        self.assertEqual('s2.small', res_dict.get('flavor'))

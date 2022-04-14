@@ -42,6 +42,8 @@ class ListReservations(command.Lister):
             kwargs['all_projects'] = True
         reservations = client.reservations.list(**kwargs)
         columns = ['id', 'status', 'flavor', 'start', 'end']
+        for r in reservations:
+            r.flavor = r.flavor.name
         return (
             columns,
             (osc_utils.get_item_properties(q, columns) for q in reservations)
