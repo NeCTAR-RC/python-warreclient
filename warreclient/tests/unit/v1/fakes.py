@@ -25,6 +25,7 @@ from warreclient.tests.unit import utils
 from warreclient.v1 import client
 from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
+from warreclient.v1 import limits
 from warreclient.v1 import reservations
 
 
@@ -74,6 +75,15 @@ generic_reservation = {
     "start": "2021-04-04T00:00:00"
 }
 
+generic_limits = {
+    "absolute": {
+        "maxHours": 49,
+        "maxReservations": 10,
+        "totalHoursUsed": 27,
+        "totalReservationsUsed": 4
+    }
+}
+
 
 class FakeClient(fakes.FakeClient, client.Client):
 
@@ -83,6 +93,7 @@ class FakeClient(fakes.FakeClient, client.Client):
         self.flavors = flavors.FlavorManager(self.http_client)
         self.flavorprojects = flavorprojects.FlavorProjectManager(
             self.http_client)
+        self.limits = limits.LimitsManager(self.http_client)
         self.reservations = reservations.ReservationManager(self.http_client)
 
 
@@ -268,3 +279,6 @@ class FakeSessionClient(base_client.SessionClient):
 
     def delete_v1_reservations_123(self, **kw):
         return (204, {}, '')
+
+    def get_v1_limits(self, **kw):
+        return (200, {}, generic_limits)

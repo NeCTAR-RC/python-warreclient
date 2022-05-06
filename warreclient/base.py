@@ -141,10 +141,11 @@ class Manager(object):
             return self.resource_class(self, body[response_key], resp=resp)
         return self.resource_class(self, body, resp=resp)
 
-    def _get(self, url, response_key=None, return_raw=False, headers=None):
+    def _get(self, url, response_key=None, return_raw=False, headers=None,
+             params=None):
         if headers is None:
             headers = {}
-        resp, body = self.api.get(url, headers=headers)
+        resp, body = self.api.get(url, headers=headers, params=params)
         if return_raw:
             if response_key:
                 body = body[response_key]

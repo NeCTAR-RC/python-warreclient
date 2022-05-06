@@ -22,13 +22,14 @@ entry_points = {
         'warre flavor access revoke = warreclient.osc.v1.flavors:RevokeAccess',
         'warre flavor access list = warreclient.osc.v1.flavors:ListAccess',
         'warre flavor free-slots = warreclient.osc.v1.flavors:FlavorSlots',
+        'warre limits = warreclient.osc.v1.limits:ListLimits',
     ]
 }
 
 
 setuptools.setup(
     name='warreclient',
-    version='2.0.0',
+    version='2.1.0',
     description=('Client for the Warre system'),
     author='Sam Morrison',
     author_email='sorrison@gmail.com',

@@ -15,6 +15,7 @@ from warreclient import client
 from warreclient import exceptions
 from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
+from warreclient.v1 import limits
 from warreclient.v1 import reservations
 
 
@@ -35,4 +36,5 @@ class Client(object):
         self.flavorprojects = flavorprojects.FlavorProjectManager(
             self.http_client)
         self.flavors = flavors.FlavorManager(self.http_client)
+        self.limits = limits.LimitsManager(self.http_client)
         self.reservations = reservations.ReservationManager(self.http_client)
