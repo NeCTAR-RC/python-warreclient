@@ -31,6 +31,10 @@ class ListFlavors(command.Lister):
         kwargs = {}
         if parsed_args.all:
             kwargs['all_projects'] = True
+        if parsed_args.category:
+            kwargs['category'] = parsed_args.category
+        if parsed_args.availability_zone:
+            kwargs['availability_zone'] = parsed_args.availability_zone
         flavors = client.flavors.list(**kwargs)
         columns = ['id', 'name', 'memory_mb', 'disk_gb', 'vcpu',
                    'active', 'is_public']
@@ -46,6 +50,14 @@ class ListFlavors(command.Lister):
             action='store_true',
             default=False,
             help="List all flavors"
+        )
+        parser.add_argument(
+            '--category',
+            help="Filter by category field"
+        )
+        parser.add_argument(
+            '--availability-zone',
+            help="Filter by availability_zone field"
         )
         return parser
 
