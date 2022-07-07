@@ -61,7 +61,9 @@ class FlavorsTest(utils.TestCase):
                 'is_public': False,
                 'extra_specs': {'foo': 'bar', 'bar': 'foo'},
                 'start': '2021-04-04T00:00:00',
-                'end': '2021-04-04T01:00:00'}
+                'end': '2021-04-04T01:00:00',
+                'category': "catA",
+                'availability_zone': 'zone1'}
 
         flavor = self.cs.flavors.create(**data)
         json_data = json.dumps(data)
@@ -79,7 +81,9 @@ class FlavorsTest(utils.TestCase):
             'is_public': True,
             'extra_specs': {},
             'start': None,
-            'end': None}
+            'end': None,
+            'category': None,
+            'availability_zone': None}
 
         data = {'name': 'foo',
                 'vcpu': 20,

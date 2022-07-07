@@ -182,6 +182,16 @@ class CreateFlavor(command.ShowOne):
             help='End time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
                 'restrict when a flavor can be used',
         )
+        parser.add_argument(
+            '--category',
+            default=None,
+            help="Category for flavor"
+        )
+        parser.add_argument(
+            '--availability-zone',
+            default=None,
+            help="availability_zone of flavor"
+        )
 
         return parser
 
@@ -212,7 +222,9 @@ class CreateFlavor(command.ShowOne):
                   'is_public': is_public,
                   'extra_specs': extra_specs,
                   'start': parsed_args.start,
-                  'end': parsed_args.end}
+                  'end': parsed_args.end,
+                  'category': parsed_args.category,
+                  'availability_zone': parsed_args.availability_zone}
 
         flavor = client.flavors.create(**fields)
         flavor_dict = flavor.to_dict()
@@ -263,6 +275,36 @@ class UpdateFlavor(FlavorCommand):
             action='store_true',
             help="Flavor is private"
         )
+        parser.add_argument(
+            '--category',
+            default=None,
+            help="Category for flavor"
+        )
+        parser.add_argument(
+            '--availability-zone',
+            default=None,
+            help="availability_zone of flavor"
+        )
+        parser.add_argument(
+            '--start',
+            metavar='<start>',
+            default=None,
+            help='Start time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+                 'restrict when a flavor can be used',
+        )
+        parser.add_argument(
+            '--end',
+            metavar='<end>',
+            default=None,
+            help='End time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+                'restrict when a flavor can be used',
+        )
+        parser.add_argument(
+            '--extra-specs',
+            metavar='<extra_specs>',
+            default={},
+            help='A dictionary of extra Specs for the flavor'
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -277,6 +319,13 @@ class UpdateFlavor(FlavorCommand):
                 "Can't specify --active and --disable")
 
         flavor = self._get_flavor(parsed_args.id)
+
+        try:
+            extra_specs = json.loads(parsed_args.extra_specs) \
+                if parsed_args.extra_specs else None
+        except json.JSONDecodeError:
+            raise exceptions.CommandError("Extra specs not valid json")
+
         data = {}
         if parsed_args.description:
             data['description'] = parsed_args.description
@@ -292,6 +341,16 @@ class UpdateFlavor(FlavorCommand):
             data['active'] = True
         if parsed_args.disable:
             data['active'] = False
+        if parsed_args.category:
+            data['category'] = parsed_args.category
+        if parsed_args.availability_zone:
+            data['availability_zone'] = parsed_args.availability_zone
+        if parsed_args.start:
+            data['start'] = parsed_args.start
+        if parsed_args.end:
+            data['end'] = parsed_args.end
+        if extra_specs is not None:
+            data['extra_specs'] = extra_specs
         flavor = client.flavors.update(flavor_id=parsed_args.id, **data)
         flavor_dict = flavor.to_dict()
         return self.dict2columns(flavor_dict)
