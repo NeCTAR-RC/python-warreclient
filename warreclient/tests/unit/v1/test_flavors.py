@@ -53,6 +53,7 @@ class FlavorsTest(utils.TestCase):
                 'vcpu': 20,
                 'memory_mb': 30,
                 'disk_gb': 40,
+                'ephemeral_gb': 100,
                 'description': 'foobar',
                 'active': False,
                 'properties': 'foo=bar',
@@ -73,6 +74,7 @@ class FlavorsTest(utils.TestCase):
 
     def test_create_defaults(self):
         defaults = {
+            'ephemeral_gb': 0,
             'description': None,
             'active': True,
             'properties': None,

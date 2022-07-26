@@ -51,6 +51,7 @@ generic_flavor = {
     "memory_mb": 4096,
     "is_public": True,
     "disk_gb": 30,
+    "ephemeral_gb": 100,
     "active": True,
     "description": "Desc 2",
     "extra_specs": {},
@@ -177,6 +178,7 @@ class FakeSessionClient(base_client.SessionClient):
                 "memory_mb": 4096,
                 "is_public": False,
                 "disk_gb": 30,
+                "ephemeral_gb": 50,
                 "active": False,
                 "description": "Desc 1",
                 "extra_specs": {},
@@ -191,6 +193,7 @@ class FakeSessionClient(base_client.SessionClient):
                 "memory_mb": 4096,
                 "is_public": True,
                 "disk_gb": 30,
+                "ephemeral_gb": 100,
                 "active": True,
                 "description": "Desc 2",
                 "extra_specs": {},
@@ -217,6 +220,7 @@ class FakeSessionClient(base_client.SessionClient):
                 "memory_mb": 4096,
                 "is_public": True,
                 "disk_gb": 30,
+                "ephemeral_gb": 50,
                 "active": True,
                 "description": "Desc 2"
             })

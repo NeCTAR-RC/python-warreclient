@@ -46,16 +46,17 @@ class FlavorManager(base.BasicManager):
         return self._list('/%s/%s/freeslots/?start=%s&end=%s' % (
             self.base_url, flavor_id, start, end), obj_class=None, raw=True)
 
-    def create(self, name, vcpu, memory_mb, disk_gb, description=None,
-               active=True, properties=None, max_length_hours=504, slots=1,
-               is_public=True, extra_specs={}, start=None, end=None,
-               category=None, availability_zone=None):
+    def create(self, name, vcpu, memory_mb, disk_gb, ephemeral_gb=0,
+               description=None, active=True, properties=None,
+               max_length_hours=504, slots=1, is_public=True, extra_specs={},
+               start=None, end=None, category=None, availability_zone=None):
 
         data = {'name': name,
                 'description': description,
                 'vcpu': int(vcpu),
                 'memory_mb': int(memory_mb),
                 'disk_gb': int(disk_gb),
+                'ephemeral_gb': int(ephemeral_gb),
                 'properties': properties,
                 'active': active,
                 'max_length_hours': int(max_length_hours),

@@ -36,8 +36,8 @@ class ListFlavors(command.Lister):
         if parsed_args.availability_zone:
             kwargs['availability_zone'] = parsed_args.availability_zone
         flavors = client.flavors.list(**kwargs)
-        columns = ['id', 'name', 'memory_mb', 'disk_gb', 'vcpu',
-                   'active', 'is_public']
+        columns = ['id', 'name', 'vcpu', 'memory_mb', 'disk_gb',
+                   'ephemeral_gb', 'active', 'is_public']
         return (
             columns,
             (osc_utils.get_item_properties(q, columns) for q in flavors)
@@ -132,6 +132,12 @@ class CreateFlavor(command.ShowOne):
             help="Amount of disk in GB"
         )
         parser.add_argument(
+            '--ephemeral',
+            metavar='<ephemeral>',
+            type=int,
+            help="Amount of ephemeral disk in GB"
+        )
+        parser.add_argument(
             '--properties',
             metavar='<properties>',
             help="Properties for flavor"
@@ -214,6 +220,7 @@ class CreateFlavor(command.ShowOne):
                   'vcpu': parsed_args.vcpu,
                   'memory_mb': parsed_args.memory,
                   'disk_gb': parsed_args.disk,
+                  'ephemeral_gb': parsed_args.ephemeral,
                   'description': parsed_args.description,
                   'active': active,
                   'properties': parsed_args.properties,
