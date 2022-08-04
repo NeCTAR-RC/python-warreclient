@@ -32,6 +32,11 @@ class ListReservations(command.Lister):
             default=False,
             help="List all projects reservations (admin only)"
         )
+        parser.add_argument(
+            '--project',
+            metavar='<project>',
+            help="Filter by project ID"
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -40,6 +45,11 @@ class ListReservations(command.Lister):
         kwargs = {}
         if parsed_args.all_projects:
             kwargs['all_projects'] = True
+        if parsed_args.project:
+            kwargs['project_id'] = parsed_args.project
+            # Assume all_projects if project set
+            kwargs['all_projects'] = True
+
         reservations = client.reservations.list(**kwargs)
         columns = ['id', 'status', 'flavor', 'start', 'end']
         for r in reservations:
