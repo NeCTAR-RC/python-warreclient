@@ -73,12 +73,12 @@ class FlavorCommand(command.ShowOne):
         )
         return parser
 
-    def _get_flavor(self, id):
+    def _get_flavor(self, id_or_name):
         client = self.app.client_manager.warre
-        try:
-            flavor = client.flavors.get(id)
-        except exceptions.NotFound as ex:
-            raise exceptions.CommandError(str(ex))
+        flavor = osc_utils.find_resource(
+            client.flavors,
+            id_or_name,
+            all_projects=True)
         return flavor
 
 

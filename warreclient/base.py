@@ -252,9 +252,12 @@ class ManagerWithFind(Manager):
         the Python side.
         """
         found = []
+        all_projects = kwargs.pop('all_projects', None)
         searches = kwargs.items()
-
-        for obj in self.list():
+        list_kwargs = {}
+        if all_projects:
+            list_kwargs = {'all_projects': True}
+        for obj in self.list(**list_kwargs):
             try:
                 if all(getattr(obj, attr) == value
                        for (attr, value) in searches):

@@ -13,6 +13,7 @@
 
 import logging
 
+from openstackclient.identity import common
 from osc_lib.command import command
 from osc_lib import utils as osc_utils
 
@@ -35,8 +36,15 @@ class ListReservations(command.Lister):
         parser.add_argument(
             '--project',
             metavar='<project>',
-            help="Filter by project ID"
+            help="Filter by project (name or ID)"
         )
+        parser.add_argument(
+            '--project-domain',
+            default='default',
+            metavar='<project_domain>',
+            help='Project domain to filter (name or ID)',
+        )
+
         return parser
 
     def take_action(self, parsed_args):
@@ -46,7 +54,15 @@ class ListReservations(command.Lister):
         if parsed_args.all_projects:
             kwargs['all_projects'] = True
         if parsed_args.project:
-            kwargs['project_id'] = parsed_args.project
+            identity_client = self.app.client_manager.identity
+            project = common.find_project(
+                identity_client,
+                common._get_token_resource(identity_client, 'project',
+                                           parsed_args.project),
+                parsed_args.project_domain,
+            )
+
+            kwargs['project_id'] = project.id
             # Assume all_projects if project set
             kwargs['all_projects'] = True
 
@@ -126,7 +142,12 @@ class CreateReservation(command.ShowOne):
         self.log.debug('take_action(%s)', parsed_args)
 
         client = self.app.client_manager.warre
-        fields = {'flavor_id': parsed_args.flavor,
+        flavor = osc_utils.find_resource(
+            client.flavors,
+            parsed_args.flavor,
+            all_projects=True)
+
+        fields = {'flavor_id': flavor.id,
                   'start': parsed_args.start,
                   'end': parsed_args.end,
                   'instance_count': parsed_args.instance_count}
