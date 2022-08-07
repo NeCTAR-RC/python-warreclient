@@ -51,8 +51,10 @@ class ListReservations(command.Lister):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
         kwargs = {}
+        columns = ['id', 'flavor', 'start', 'end', 'status']
         if parsed_args.all_projects:
             kwargs['all_projects'] = True
+            columns = ['id', 'project_id', 'flavor', 'start', 'end', 'status']
         if parsed_args.project:
             identity_client = self.app.client_manager.identity
             project = common.find_project(
@@ -67,7 +69,6 @@ class ListReservations(command.Lister):
             kwargs['all_projects'] = True
 
         reservations = client.reservations.list(**kwargs)
-        columns = ['id', 'status', 'flavor', 'start', 'end']
         for r in reservations:
             r.flavor = r.flavor.name
         return (

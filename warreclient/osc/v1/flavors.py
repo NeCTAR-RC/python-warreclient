@@ -14,6 +14,7 @@
 import json
 import logging
 
+from openstackclient.identity import common
 from osc_lib.command import command
 from osc_lib import utils as osc_utils
 
@@ -358,7 +359,7 @@ class UpdateFlavor(FlavorCommand):
             data['end'] = parsed_args.end
         if extra_specs is not None:
             data['extra_specs'] = extra_specs
-        flavor = client.flavors.update(flavor_id=parsed_args.id, **data)
+        flavor = client.flavors.update(flavor_id=flavor.id, **data)
         flavor_dict = flavor.to_dict()
         return self.dict2columns(flavor_dict)
 
@@ -388,14 +389,20 @@ class GrantAccess(command.ShowOne):
     def get_parser(self, prog_name):
         parser = super(GrantAccess, self).get_parser(prog_name)
         parser.add_argument(
-            'flavor_id',
-            metavar='<flavor_id>',
-            help='Flavor ID'
+            'flavor',
+            metavar='<flavor>',
+            help='Flavor (name or ID)'
         )
         parser.add_argument(
-            'project_id',
-            metavar='<project_id>',
-            help='Project ID'
+            'project',
+            metavar='<project>',
+            help="Project (name or ID)"
+        )
+        parser.add_argument(
+            '--project-domain',
+            default='default',
+            metavar='<project_domain>',
+            help='Project domain (name or ID)',
         )
         return parser
 
@@ -403,9 +410,20 @@ class GrantAccess(command.ShowOne):
         self.log.debug('take_action(%s)', parsed_args)
 
         client = self.app.client_manager.warre
+        identity_client = self.app.client_manager.identity
+        project = common.find_project(
+            identity_client,
+            common._get_token_resource(identity_client, 'project',
+                                       parsed_args.project),
+            parsed_args.project_domain,
+        )
+        flavor = osc_utils.find_resource(
+            client.flavors,
+            parsed_args.flavor,
+            all_projects=True)
 
-        fields = {'flavor_id': parsed_args.flavor_id,
-                  'project_id': parsed_args.project_id}
+        fields = {'flavor_id': flavor.id,
+                  'project_id': project.id}
 
         flavorproject = client.flavorprojects.create(**fields)
         fp_dict = flavorproject.to_dict()
@@ -445,25 +463,51 @@ class ListAccess(command.Lister):
     def get_parser(self, prog_name):
         parser = super(ListAccess, self).get_parser(prog_name)
         parser.add_argument(
-            '--flavor-id',
+            '--flavor',
             default=None,
             metavar='<flavor_id>',
-            help='Filter by Flavor ID'
+            help='Filter by Flavor (name or ID)'
         )
         parser.add_argument(
-            '--project-id',
+            '--project',
             default=None,
-            metavar='<project_id>',
-            help='Filter by Project ID'
+            metavar='<project>',
+            help='Filter by Project (name or ID)'
+        )
+        parser.add_argument(
+            '--project-domain',
+            default='default',
+            metavar='<project_domain>',
+            help='Project domain (name or ID)',
         )
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
+        if parsed_args.project:
+            identity_client = self.app.client_manager.identity
+            project = common.find_project(
+                identity_client,
+                common._get_token_resource(identity_client, 'project',
+                                           parsed_args.project),
+                parsed_args.project_domain,
+            )
+            project_id = project.id
+        else:
+            project_id = None
+
+        if parsed_args.flavor:
+            flavor = osc_utils.find_resource(
+                client.flavors,
+                parsed_args.flavor,
+                all_projects=True)
+            flavor_id = flavor.id
+        else:
+            flavor_id = None
 
         flavorprojects = client.flavorprojects.list(
-            flavor_id=parsed_args.flavor_id, project_id=parsed_args.project_id)
+            flavor_id=flavor_id, project_id=project_id)
         columns = ['id', 'flavor', 'project_id']
         return (
             columns,
@@ -479,7 +523,11 @@ class FlavorSlots(command.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
-        slots = client.flavors.free_slots(parsed_args.id, parsed_args.start,
+        flavor = osc_utils.find_resource(
+            client.flavors,
+            parsed_args.id,
+            all_projects=True)
+        slots = client.flavors.free_slots(flavor.id, parsed_args.start,
             parsed_args.end)
         columns = ['start', 'end']
         return (
