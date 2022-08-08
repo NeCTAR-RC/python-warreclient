@@ -127,8 +127,7 @@ class CreateReservation(command.ShowOne):
             '--end',
             metavar='<end>',
             required=True,
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease '
-                 '(default: 24h from now)',
+            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease'
         )
         parser.add_argument(
             '--instance-count',
@@ -172,3 +171,29 @@ class DeleteReservation(ReservationCommand):
             raise exceptions.CommandError(str(ex))
 
         return [], []
+
+
+class UpdateReservation(ReservationCommand):
+    """Update reservation."""
+
+    log = logging.getLogger(__name__ + '.UpdateReservation')
+
+    def get_parser(self, prog_name):
+        parser = super(UpdateReservation, self).get_parser(prog_name)
+        parser.add_argument(
+            '--end',
+            metavar='<end>',
+            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease'
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)', parsed_args)
+        client = self.app.client_manager.warre
+        try:
+            reservation = client.reservations.update(
+                parsed_args.id, end=parsed_args.end)
+        except exceptions.NotFound as ex:
+            raise exceptions.CommandError(str(ex))
+
+        return self.dict2columns(reservation.to_dict())

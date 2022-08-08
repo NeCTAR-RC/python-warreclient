@@ -12,6 +12,7 @@ entry_points = {
         'warre reservation list = warreclient.osc.v1.reservations:ListReservations',
         'warre reservation show = warreclient.osc.v1.reservations:ShowReservation',
         'warre reservation create = warreclient.osc.v1.reservations:CreateReservation',
+        'warre reservation set = warreclient.osc.v1.reservations:UpdateReservation',
         'warre reservation delete = warreclient.osc.v1.reservations:DeleteReservation',
         'warre flavor list = warreclient.osc.v1.flavors:ListFlavors',
         'warre flavor show = warreclient.osc.v1.flavors:ShowFlavor',
@@ -29,7 +30,7 @@ entry_points = {
 
 setuptools.setup(
     name='warreclient',
-    version='2.8.0',
+    version='2.9.0',
     description=('Client for the Warre system'),
     author='Sam Morrison',
     author_email='sorrison@gmail.com',

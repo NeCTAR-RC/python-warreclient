@@ -46,3 +46,7 @@ class ReservationManager(base.BasicManager):
                 'end': end,
                 'instance_count': instance_count}
         return self._create("/%s/" % self.base_url, data=data)
+
+    def update(self, reservation_id, **kwargs):
+        return self._update('/%s/%s/' % (self.base_url, reservation_id),
+                            data=kwargs)

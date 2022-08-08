@@ -42,8 +42,8 @@ class ReservationsTest(utils.TestCase):
 
     def test_create(self):
         data = {'flavor_id': '987d558c-3ac3-4bc0-962a-aeb1fbebf5bb',
-                'start': '2021-04-04T00:00:00',
-                'end': '2021-04-04T01:00:00',
+                'start': '2021-04-04 00:00:00',
+                'end': '2021-04-04 01:00:00',
                 'instance_count': 2}
 
         reservation = self.cs.reservations.create(**data)
@@ -55,6 +55,11 @@ class ReservationsTest(utils.TestCase):
     def test_delete(self):
         self.cs.reservations.delete(123)
         self.cs.assert_called('DELETE', '/v1/reservations/123/')
+
+    def test_update(self):
+        reservation = self.cs.reservations.update(123, end='2022-01-01 13:00')
+        self.cs.assert_called('PATCH', '/v1/reservations/123/')
+        self.assertIsInstance(reservation, reservations.Reservation)
 
     def test_reservation_to_dict(self):
         reservation = self.cs.reservations.get(123)

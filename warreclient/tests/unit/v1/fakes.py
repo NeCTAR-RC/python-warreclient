@@ -284,5 +284,9 @@ class FakeSessionClient(base_client.SessionClient):
     def delete_v1_reservations_123(self, **kw):
         return (204, {}, '')
 
+    def patch_v1_reservations_123(self, data, **kw):
+        return (202, {'end': '2022-01-01 12:00'},
+                generic_reservation)
+
     def get_v1_limits(self, **kw):
         return (200, {}, generic_limits)
