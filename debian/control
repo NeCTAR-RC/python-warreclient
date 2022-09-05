@@ -15,12 +15,29 @@ Build-Depends:
  python3-keystoneauth1,
  python3-osc-lib,
  python3-freezegun,
+ python-all,
+ python-setuptools,
+ python-pip,
+ python-mock,
+ python-testtools,
+ python-requests-mock,
+ python-fixtures,
+ python-requests,
+ python-keystoneauth1,
+ python-osc-lib,
+ python-freezegun,
  dh-python,
 Standards-Version: 3.9.5
 Homepage: https://github.com/NeCTAR-RC/python-warreclient
 
+Package: python-warreclient
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Nectar Reservation system client
+ Nectar Reservation system client
+
 Package: python3-warreclient
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}
-Description: Nectar Allocation System python client
- Nectar Allocation System python client
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: Nectar Reservation system client
+ Nectar Reservation system client
