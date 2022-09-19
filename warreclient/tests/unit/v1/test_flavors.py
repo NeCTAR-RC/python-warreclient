@@ -106,7 +106,9 @@ class FlavorsTest(utils.TestCase):
         free_slots = self.cs.flavors.free_slots(123)
         self.cs.assert_called(
             'GET',
-            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-06-18')
+            '/v1/flavors/123/freeslots/',
+            params={'end': datetime.date(2021, 6, 18)},
+        )
         self.assertIsInstance(free_slots, list)
         self.assertIsInstance(free_slots[0], dict)
 
@@ -114,22 +116,32 @@ class FlavorsTest(utils.TestCase):
         self.cs.flavors.free_slots(123, end='2021-09-01')
         self.cs.assert_called(
             'GET',
-            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-09-01')
+            '/v1/flavors/123/freeslots/',
+            params={'end': datetime.date(2021, 9, 1)}
+        )
 
     def test_free_slots_end_date(self):
         self.cs.flavors.free_slots(123, end=datetime.date(2021, 8, 31))
         self.cs.assert_called(
             'GET',
-            '/v1/flavors/123/freeslots/?start=2021-05-19&end=2021-08-31')
+            '/v1/flavors/123/freeslots/',
+            params={'end': datetime.date(2021, 8, 31)}
+        )
 
     def test_free_slots_start(self):
         self.cs.flavors.free_slots(123, start='2021-07-01')
         self.cs.assert_called(
             'GET',
-            '/v1/flavors/123/freeslots/?start=2021-07-01&end=2021-07-31')
+            '/v1/flavors/123/freeslots/',
+            params={'start': datetime.date(2021, 7, 1),
+                    'end': datetime.date(2021, 7, 31)}
+        )
 
     def test_free_slots_start_date(self):
         self.cs.flavors.free_slots(123, start=datetime.date(2021, 7, 1))
         self.cs.assert_called(
             'GET',
-            '/v1/flavors/123/freeslots/?start=2021-07-01&end=2021-07-31')
+            '/v1/flavors/123/freeslots/',
+            params={'start': datetime.date(2021, 7, 1),
+                    'end': datetime.date(2021, 7, 31)}
+        )

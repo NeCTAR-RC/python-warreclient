@@ -37,14 +37,20 @@ class FlavorManager(base.BasicManager):
         return self._delete('/%s/%s/' % (self.base_url, flavor_id))
 
     def free_slots(self, flavor_id, start=None, end=None):
-        if start is None:
-            start = datetime.date.today()
-        elif type(start) == str:
+        today = datetime.date.today()
+        if type(start) == str:
             start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        if type(end) == str:
+            end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+        params = {}
+        if start is not None:
+            params['start'] = start
         if end is None:
-            end = start + datetime.timedelta(days=30)
-        return self._list('/%s/%s/freeslots/?start=%s&end=%s' % (
-            self.base_url, flavor_id, start, end), obj_class=None, raw=True)
+            params['end'] = (start or today) + datetime.timedelta(days=30)
+        else:
+            params['end'] = end
+        return self._list('/%s/%s/freeslots/' % (self.base_url, flavor_id),
+                          obj_class=None, raw=True, params=params)
 
     def create(self, name, vcpu, memory_mb, disk_gb, ephemeral_gb=0,
                description=None, active=True, properties=None,
