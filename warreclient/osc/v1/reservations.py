@@ -39,6 +39,11 @@ class ListReservations(command.Lister):
             help="Filter by project (name or ID)"
         )
         parser.add_argument(
+            '--flavor',
+            metavar='<flavor>',
+            help="Filter by flavor (name or ID)"
+        )
+        parser.add_argument(
             '--project-domain',
             default='default',
             metavar='<project_domain>',
@@ -67,7 +72,12 @@ class ListReservations(command.Lister):
             kwargs['project_id'] = project.id
             # Assume all_projects if project set
             kwargs['all_projects'] = True
-
+        if parsed_args.flavor:
+            flavor = osc_utils.find_resource(
+                client.flavors,
+                parsed_args.flavor,
+                all_projects=parsed_args.all_projects)
+            kwargs['flavor_id'] = flavor.id
         reservations = client.reservations.list(**kwargs)
         for r in reservations:
             r.flavor = r.flavor.name
