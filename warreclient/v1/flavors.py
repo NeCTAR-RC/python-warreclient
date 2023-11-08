@@ -38,9 +38,9 @@ class FlavorManager(base.BasicManager):
 
     def free_slots(self, flavor_id, start=None, end=None):
         today = datetime.date.today()
-        if type(start) == str:
+        if isinstance(start, str):
             start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
-        if type(end) == str:
+        if isinstance(end, str):
             end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
         params = {}
         if start is not None:
