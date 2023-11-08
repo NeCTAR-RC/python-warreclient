@@ -15,6 +15,7 @@ Build-Depends:
  python3-keystoneauth1,
  python3-osc-lib,
  python3-freezegun,
+ python3-nectarclient-lib,
  dh-python,
 Standards-Version: 3.9.5
 Homepage: https://github.com/NeCTAR-RC/python-warreclient
