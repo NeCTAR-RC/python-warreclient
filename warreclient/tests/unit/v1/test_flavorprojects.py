@@ -13,10 +13,10 @@
 
 import json
 
-from warreclient.v1 import flavorprojects
+from nectarclient_lib.tests.unit import utils
 
-from warreclient.tests.unit import utils
 from warreclient.tests.unit.v1 import fakes
+from warreclient.v1 import flavorprojects
 
 
 class FlavorProjectsTest(utils.TestCase):

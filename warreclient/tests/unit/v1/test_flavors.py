@@ -15,8 +15,8 @@ import datetime
 import json
 
 from freezegun import freeze_time
+from nectarclient_lib.tests.unit import utils
 
-from warreclient.tests.unit import utils
 from warreclient.tests.unit.v1 import fakes
 from warreclient.v1 import flavors
 

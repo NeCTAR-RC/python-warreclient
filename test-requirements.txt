@@ -4,5 +4,4 @@ coverage
 requests-mock
 testtools
 stestr
-mock
 freezegun

@@ -11,17 +11,13 @@
 #    under the License.
 
 import re
+from unittest import mock
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-
+from nectarclient_lib.tests.unit import fakes
+from nectarclient_lib.tests.unit import utils
 from six.moves.urllib import parse
 
 from warreclient import client as base_client
-from warreclient.tests.unit import fakes
-from warreclient.tests.unit import utils
 from warreclient.v1 import client
 from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
