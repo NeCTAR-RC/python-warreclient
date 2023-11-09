@@ -13,7 +13,7 @@
 
 import datetime
 
-from warreclient import base
+from nectarclient_lib import base
 
 
 class Flavor(base.Resource):

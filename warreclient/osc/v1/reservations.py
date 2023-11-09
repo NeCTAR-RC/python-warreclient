@@ -13,11 +13,10 @@
 
 import logging
 
+from nectarclient_lib import exceptions
 from openstackclient.identity import common
 from osc_lib.command import command
 from osc_lib import utils as osc_utils
-
-from warreclient import exceptions
 
 
 class ListReservations(command.Lister):

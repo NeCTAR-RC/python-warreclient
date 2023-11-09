@@ -11,7 +11,8 @@
 #   under the License.
 #
 
-from warreclient import base
+from nectarclient_lib import base
+
 from warreclient.v1 import flavors
 
 

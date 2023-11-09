@@ -11,8 +11,9 @@
 #   under the License.
 #
 
+from nectarclient_lib import exceptions
+
 from warreclient import client
-from warreclient import exceptions
 from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
 from warreclient.v1 import limits

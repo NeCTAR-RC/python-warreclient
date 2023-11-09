@@ -11,7 +11,7 @@
 #   under the License.
 #
 
-from warreclient import base
+from nectarclient_lib import base
 
 
 class FlavorProject(base.Resource):
