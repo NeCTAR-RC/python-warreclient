@@ -30,7 +30,7 @@ entry_points = {
 
 setuptools.setup(
     name='warreclient',
-    version='2.13.0',
+    version='3.0.0',
     description=('Client for the Warre system'),
     author='Sam Morrison',
     author_email='sorrison@gmail.com',
