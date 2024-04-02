@@ -135,6 +135,7 @@ class CreateFlavor(command.ShowOne):
             '--ephemeral',
             metavar='<ephemeral>',
             type=int,
+            default=0,
             help="Amount of ephemeral disk in GB"
         )
         parser.add_argument(
