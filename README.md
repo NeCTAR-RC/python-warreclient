@@ -9,7 +9,7 @@ https://github.com/NeCTAR-RC/warre/
 
 * `openstack warre flavor show <Flavor-ID>`
 
-* `openstack warre reservation create --start  '2021-04-23 05:10' --end '2021-04-23 06:00' <Flavor-ID>
+* `openstack warre reservation create --start  '2021-04-23 05:10' --end '2021-04-23 06:00' <Flavor-ID>`
 
 * `openstack warre reservation list`
 
