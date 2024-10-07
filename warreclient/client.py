@@ -14,6 +14,8 @@ from keystoneauth1 import adapter
 from nectarclient_lib import exceptions
 from oslo_utils import importutils
 
+import warreclient
+
 
 def Client(version, *args, **kwargs):
     module = f'warreclient.v{version}.client'
@@ -24,7 +26,7 @@ def Client(version, *args, **kwargs):
 
 class SessionClient(adapter.Adapter):
     client_name = 'python-warreclient'
-    client_version = '2.13.0'
+    client_version = warreclient.__version__
 
     def request(self, url, method, **kwargs):
         kwargs.setdefault('headers', kwargs.get('headers', {}))
