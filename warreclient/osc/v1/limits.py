@@ -30,13 +30,17 @@ class ListLimits(command.Lister):
             kwargs['project_id'] = parsed_args.project_id
         limits = client.limits.get(**kwargs)
         columns = ["Name", "Value"]
-        return (columns, (utils.get_item_properties(s, columns)
-                          for s in itertools.chain(limits.absolute)))
+        return (
+            columns,
+            (
+                utils.get_item_properties(s, columns)
+                for s in itertools.chain(limits.absolute)
+            ),
+        )
 
     def get_parser(self, prog_name):
-        parser = super(ListLimits, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument(
-            '--project-id',
-            help="List limits for project_id (admin only)"
+            '--project-id', help="List limits for project_id (admin only)"
         )
         return parser

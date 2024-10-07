@@ -16,20 +16,19 @@ from nectarclient_lib import base
 
 class FlavorProject(base.Resource):
     def __repr__(self):
-        return "<FlavorProject %s>" % self.attributes.get('id')
+        return "<FlavorProject {}>".format(self.attributes.get('id'))
 
 
 class FlavorProjectManager(base.Manager):
-
     base_url = 'v1/flavorprojects'
     resource_class = FlavorProject
 
     def delete(self, flavor_id):
-        return self._delete('/%s/%s/' % (self.base_url, flavor_id))
+        return self._delete(f'/{self.base_url}/{flavor_id}/')
 
     def create(self, flavor_id, project_id):
         data = {"flavor_id": flavor_id, "project_id": project_id}
-        return self._create("/%s/" % self.base_url, data=data)
+        return self._create(f"/{self.base_url}/", data=data)
 
     def list(self, flavor_id=None, project_id=None):
         kwargs = {}
@@ -37,4 +36,4 @@ class FlavorProjectManager(base.Manager):
             kwargs['flavor_id'] = flavor_id
         if project_id is not None:
             kwargs['project_id'] = project_id
-        return self._list('/%s/' % self.base_url, params=kwargs)
+        return self._list(f'/{self.base_url}/', params=kwargs)

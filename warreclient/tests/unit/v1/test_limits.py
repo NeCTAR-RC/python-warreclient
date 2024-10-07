@@ -19,9 +19,8 @@ from warreclient.v1 import limits
 
 
 class LimitsTest(utils.TestCase):
-
     def setUp(self):
-        super(LimitsTest, self).setUp()
+        super().setUp()
         self.cs = fakes.FakeClient()
 
     def test_get_limits(self):
@@ -36,7 +35,7 @@ class LimitsTest(utils.TestCase):
             limits.AbsoluteLimit("maxHours", 49),
             limits.AbsoluteLimit("maxReservations", 10),
             limits.AbsoluteLimit("totalHoursUsed", 27),
-            limits.AbsoluteLimit("totalReservationsUsed", 4)
+            limits.AbsoluteLimit("totalReservationsUsed", 4),
         ]
         abs_limits = list(obj.absolute)
         self.assertEqual(len(abs_limits), len(expected))

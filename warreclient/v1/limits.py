@@ -22,11 +22,11 @@ class Limits(base.Resource):
 
     @property
     def absolute(self):
-        for (name, value) in self._info['absolute'].items():
+        for name, value in self._info['absolute'].items():
             yield AbsoluteLimit(name, value)
 
 
-class AbsoluteLimit(object):
+class AbsoluteLimit:
     """Data model that represents a single absolute limit."""
 
     def __init__(self, name, value):
@@ -37,7 +37,7 @@ class AbsoluteLimit(object):
         return self.value == other.value and self.name == other.name
 
     def __repr__(self):
-        return "<AbsoluteLimit: name=%s>" % (self.name)
+        return f"<AbsoluteLimit: name={self.name}>"
 
 
 class LimitsManager(base.Manager):

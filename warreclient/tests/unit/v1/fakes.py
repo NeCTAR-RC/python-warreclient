@@ -28,8 +28,7 @@ from warreclient.v1 import reservations
 # regex to compare callback to result of get_endpoint()
 # checks version number (vX or vX.X where X is a number)
 # and also checks if the id is on the end
-ENDPOINT_RE = re.compile(
-    r"^get_http:__warre_api:8774_v\d(_\d)?_\w{32}$")
+ENDPOINT_RE = re.compile(r"^get_http:__warre_api:8774_v\d(_\d)?_\w{32}$")
 
 # accepts formats like v2 or v2.1
 ENDPOINT_TYPE_RE = re.compile(r"^v\d(\.\d)?$")
@@ -69,7 +68,7 @@ generic_reservation = {
     "end": "2021-04-04T01:00:00",
     "flavor": generic_flavor,
     "project_id": "9427903ca1544f0795ba4117d55ed9b2",
-    "start": "2021-04-04T00:00:00"
+    "start": "2021-04-04T00:00:00",
 }
 
 generic_limits = {
@@ -77,27 +76,25 @@ generic_limits = {
         "maxHours": 49,
         "maxReservations": 10,
         "totalHoursUsed": 27,
-        "totalReservationsUsed": 4
+        "totalReservationsUsed": 4,
     }
 }
 
 
 class FakeClient(fakes.FakeClient, client.Client):
-
     def __init__(self, *args, **kwargs):
         client.Client.__init__(self, session=mock.Mock())
         self.http_client = FakeSessionClient(**kwargs)
         self.flavors = flavors.FlavorManager(self.http_client)
         self.flavorprojects = flavorprojects.FlavorProjectManager(
-            self.http_client)
+            self.http_client
+        )
         self.limits = limits.LimitsManager(self.http_client)
         self.reservations = reservations.ReservationManager(self.http_client)
 
 
 class FakeSessionClient(base_client.SessionClient):
-
     def __init__(self, *args, **kwargs):
-
         self.callstack = []
         self.visited = []
         self.auth = mock.Mock()
@@ -141,25 +138,29 @@ class FakeSessionClient(base_client.SessionClient):
             munged_url = munged_url.replace('@', '_')
             munged_url = munged_url.replace('%20', '_')
             munged_url = munged_url.replace('%3A', '_')
-            callback = "%s_%s" % (method.lower(), munged_url)
+            callback = f"{method.lower()}_{munged_url}"
 
         if not hasattr(self, callback):
-            raise AssertionError('Called unknown API method: %s %s, '
-                                 'expected fakes method name: %s' %
-                                 (method, url, callback))
+            raise AssertionError(
+                f'Called unknown API method: {method} {url}, '
+                f'expected fakes method name: {callback}'
+            )
 
         # Note the call
         self.visited.append(callback)
-        self.callstack.append((method, url, kwargs.get('data'),
-                               kwargs.get('params')))
+        self.callstack.append(
+            (method, url, kwargs.get('data'), kwargs.get('params'))
+        )
 
         status, headers, data = getattr(self, callback)(**kwargs)
 
-        r = utils.TestResponse({
-            "status_code": status,
-            "text": data,
-            "headers": headers,
-        })
+        r = utils.TestResponse(
+            {
+                "status_code": status,
+                "text": data,
+                "headers": headers,
+            }
+        )
         return r, data
 
     def get_v1_flavors(self, **kw):
@@ -193,7 +194,7 @@ class FakeSessionClient(base_client.SessionClient):
                 "active": True,
                 "description": "Desc 2",
                 "extra_specs": {},
-            }
+            },
         ]
         return (200, {}, flavors)
 
@@ -201,11 +202,16 @@ class FakeSessionClient(base_client.SessionClient):
         return (200, {}, generic_flavor)
 
     def get_v1_flavors_123_freeslots(self, **kw):
-        return (200, {}, [{"end": "2021-06-18T00:00:00",
-                           "start": "2021-05-19T00:00:00"}])
+        return (
+            200,
+            {},
+            [{"end": "2021-06-18T00:00:00", "start": "2021-05-19T00:00:00"}],
+        )
 
     def patch_v1_flavors_123(self, data, **kw):
-        return (202, {'slots': 2},
+        return (
+            202,
+            {'slots': 2},
             {
                 "name": "s2.small",
                 "id": "d6506b62-13c2-4dec-a556-b306bb5e959f",
@@ -218,8 +224,9 @@ class FakeSessionClient(base_client.SessionClient):
                 "disk_gb": 30,
                 "ephemeral_gb": 50,
                 "active": True,
-                "description": "Desc 2"
-            })
+                "description": "Desc 2",
+            },
+        )
 
     def post_v1_flavors(self, **kw):
         return (200, {}, generic_flavor)
@@ -238,7 +245,7 @@ class FakeSessionClient(base_client.SessionClient):
                 "id": "8ba07d79-8c64-4dab-926b-aaeef0fde5af",
                 "project_id": "9427903ca1544f0795ba4117d55ed9b2",
                 "flavor": "41c33436-dfe5-4caf-9560-f14e493f5f88",
-            }
+            },
         ]
         return (200, {}, flavorprojects)
 
@@ -250,24 +257,26 @@ class FakeSessionClient(base_client.SessionClient):
 
     def get_v1_reservations(self, **kw):
         reservations = [
-            {"user_id": "c0645ff94b864d3d84c438d9855f9cea",
-             "id": "17664847-0aa0-4a2b-9fe4-073b922914e5",
-             "lease_id": None,
-             "status": "PENDING_CREATE",
-             "end": "2021-04-04T01:00:00",
-             "flavor": generic_flavor,
-             "project_id": "9427903ca1544f0795ba4117d55ed9b2",
-             "start": "2021-04-04T00:00:00",
+            {
+                "user_id": "c0645ff94b864d3d84c438d9855f9cea",
+                "id": "17664847-0aa0-4a2b-9fe4-073b922914e5",
+                "lease_id": None,
+                "status": "PENDING_CREATE",
+                "end": "2021-04-04T01:00:00",
+                "flavor": generic_flavor,
+                "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+                "start": "2021-04-04T00:00:00",
             },
-            {"user_id": "c0645ff94b864d3d84c438d9855f9cea",
-             "id": "17664847-0aa0-4a2b-9fe4-073b922914e6",
-             "lease_id": "987d558c-3ac3-4bc0-962a-aeb1fbebf5ba",
-             "status": "ALLOCATED",
-             "end": "2021-04-04T01:00:00",
-             "flavor": generic_flavor,
-             "project_id": "9427903ca1544f0795ba4117d55ed9b2",
-             "start": "2021-04-04T00:00:00",
-            }
+            {
+                "user_id": "c0645ff94b864d3d84c438d9855f9cea",
+                "id": "17664847-0aa0-4a2b-9fe4-073b922914e6",
+                "lease_id": "987d558c-3ac3-4bc0-962a-aeb1fbebf5ba",
+                "status": "ALLOCATED",
+                "end": "2021-04-04T01:00:00",
+                "flavor": generic_flavor,
+                "project_id": "9427903ca1544f0795ba4117d55ed9b2",
+                "start": "2021-04-04T00:00:00",
+            },
         ]
         return (200, {}, reservations)
 
@@ -281,8 +290,7 @@ class FakeSessionClient(base_client.SessionClient):
         return (204, {}, '')
 
     def patch_v1_reservations_123(self, data, **kw):
-        return (202, {'end': '2022-01-01 12:00'},
-                generic_reservation)
+        return (202, {'end': '2022-01-01 12:00'}, generic_reservation)
 
     def get_v1_limits(self, **kw):
         return (200, {}, generic_limits)

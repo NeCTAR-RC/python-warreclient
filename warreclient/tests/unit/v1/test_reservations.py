@@ -21,9 +21,8 @@ from warreclient.v1 import reservations
 
 
 class ReservationsTest(utils.TestCase):
-
     def setUp(self):
-        super(ReservationsTest, self).setUp()
+        super().setUp()
         self.cs = fakes.FakeClient()
 
     def test_reservation_list(self):
@@ -41,15 +40,16 @@ class ReservationsTest(utils.TestCase):
         self.assertIsInstance(u.flavor, flavors.Flavor)
 
     def test_create(self):
-        data = {'flavor_id': '987d558c-3ac3-4bc0-962a-aeb1fbebf5bb',
-                'start': '2021-04-04 00:00:00',
-                'end': '2021-04-04 01:00:00',
-                'instance_count': 2}
+        data = {
+            'flavor_id': '987d558c-3ac3-4bc0-962a-aeb1fbebf5bb',
+            'start': '2021-04-04 00:00:00',
+            'end': '2021-04-04 01:00:00',
+            'instance_count': 2,
+        }
 
         reservation = self.cs.reservations.create(**data)
         json_data = json.dumps(data)
-        self.cs.assert_called('POST', '/v1/reservations/',
-                              data=json_data)
+        self.cs.assert_called('POST', '/v1/reservations/', data=json_data)
         self.assertIsInstance(reservation, reservations.Reservation)
 
     def test_delete(self):

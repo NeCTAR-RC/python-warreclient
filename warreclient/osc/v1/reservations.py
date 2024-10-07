@@ -25,22 +25,22 @@ class ListReservations(command.Lister):
     log = logging.getLogger(__name__ + '.ListReservations')
 
     def get_parser(self, prog_name):
-        parser = super(ListReservations, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument(
             '--all-projects',
             action='store_true',
             default=False,
-            help="List all projects reservations (admin only)"
+            help="List all projects reservations (admin only)",
         )
         parser.add_argument(
             '--project',
             metavar='<project>',
-            help="Filter by project (name or ID)"
+            help="Filter by project (name or ID)",
         )
         parser.add_argument(
             '--flavor',
             metavar='<flavor>',
-            help="Filter by flavor (name or ID)"
+            help="Filter by flavor (name or ID)",
         )
         parser.add_argument(
             '--project-domain',
@@ -63,8 +63,9 @@ class ListReservations(command.Lister):
             identity_client = self.app.client_manager.identity
             project = common.find_project(
                 identity_client,
-                common._get_token_resource(identity_client, 'project',
-                                           parsed_args.project),
+                common._get_token_resource(
+                    identity_client, 'project', parsed_args.project
+                ),
                 parsed_args.project_domain,
             )
 
@@ -75,26 +76,22 @@ class ListReservations(command.Lister):
             flavor = osc_utils.find_resource(
                 client.flavors,
                 parsed_args.flavor,
-                all_projects=parsed_args.all_projects)
+                all_projects=parsed_args.all_projects,
+            )
             kwargs['flavor_id'] = flavor.id
         reservations = client.reservations.list(**kwargs)
         for r in reservations:
             r.flavor = r.flavor.name
         return (
             columns,
-            (osc_utils.get_item_properties(q, columns) for q in reservations)
+            (osc_utils.get_item_properties(q, columns) for q in reservations),
         )
 
 
 class ReservationCommand(command.ShowOne):
-
     def get_parser(self, prog_name):
-        parser = super(ReservationCommand, self).get_parser(prog_name)
-        parser.add_argument(
-            'id',
-            metavar='<id>',
-            help=('ID of reservation')
-        )
+        parser = super().get_parser(prog_name)
+        parser.add_argument('id', metavar='<id>', help=('ID of reservation'))
         return parser
 
 
@@ -120,12 +117,8 @@ class CreateReservation(command.ShowOne):
     log = logging.getLogger(__name__ + '.CreateReservation')
 
     def get_parser(self, prog_name):
-        parser = super(CreateReservation, self).get_parser(prog_name)
-        parser.add_argument(
-            'flavor',
-            metavar='<flavor>',
-            help="Flavor"
-        )
+        parser = super().get_parser(prog_name)
+        parser.add_argument('flavor', metavar='<flavor>', help="Flavor")
         parser.add_argument(
             '--start',
             metavar='<start>',
@@ -136,14 +129,14 @@ class CreateReservation(command.ShowOne):
             '--end',
             metavar='<end>',
             required=True,
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease'
+            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease',
         )
         parser.add_argument(
             '--instance-count',
             metavar='<instance-count>',
             type=int,
             default=1,
-            help="Number of instances (Default: 1)"
+            help="Number of instances (Default: 1)",
         )
         return parser
 
@@ -152,14 +145,15 @@ class CreateReservation(command.ShowOne):
 
         client = self.app.client_manager.warre
         flavor = osc_utils.find_resource(
-            client.flavors,
-            parsed_args.flavor,
-            all_projects=True)
+            client.flavors, parsed_args.flavor, all_projects=True
+        )
 
-        fields = {'flavor_id': flavor.id,
-                  'start': parsed_args.start,
-                  'end': parsed_args.end,
-                  'instance_count': parsed_args.instance_count}
+        fields = {
+            'flavor_id': flavor.id,
+            'start': parsed_args.start,
+            'end': parsed_args.end,
+            'instance_count': parsed_args.instance_count,
+        }
 
         reservation = client.reservations.create(**fields)
         reservation_dict = reservation.to_dict()
@@ -188,11 +182,11 @@ class UpdateReservation(ReservationCommand):
     log = logging.getLogger(__name__ + '.UpdateReservation')
 
     def get_parser(self, prog_name):
-        parser = super(UpdateReservation, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument(
             '--end',
             metavar='<end>',
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease'
+            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease',
         )
         return parser
 
@@ -201,7 +195,8 @@ class UpdateReservation(ReservationCommand):
         client = self.app.client_manager.warre
         try:
             reservation = client.reservations.update(
-                parsed_args.id, end=parsed_args.end)
+                parsed_args.id, end=parsed_args.end
+            )
         except exceptions.NotFound as ex:
             raise exceptions.CommandError(str(ex))
 

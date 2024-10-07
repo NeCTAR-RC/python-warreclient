@@ -23,9 +23,8 @@ from warreclient.v1 import flavors
 
 @freeze_time("2021-05-19")
 class FlavorsTest(utils.TestCase):
-
     def setUp(self):
-        super(FlavorsTest, self).setUp()
+        super().setUp()
         self.cs = fakes.FakeClient()
 
     def test_flavor_list(self):
@@ -43,33 +42,35 @@ class FlavorsTest(utils.TestCase):
 
     def test_update(self):
         flavor = self.cs.flavors.update(123, slots=2)
-        self.cs.assert_called('PATCH', '/v1/flavors/123/',
-                              json.dumps({'slots': 2}))
+        self.cs.assert_called(
+            'PATCH', '/v1/flavors/123/', json.dumps({'slots': 2})
+        )
         self.assertIsInstance(flavor, flavors.Flavor)
         self.assertEqual(2, flavor.slots)
 
     def test_create(self):
-        data = {'name': 'foo',
-                'vcpu': 20,
-                'memory_mb': 30,
-                'disk_gb': 40,
-                'ephemeral_gb': 100,
-                'description': 'foobar',
-                'active': False,
-                'properties': 'foo=bar',
-                'max_length_hours': 24,
-                'slots': 7,
-                'is_public': False,
-                'extra_specs': {'foo': 'bar', 'bar': 'foo'},
-                'start': '2021-04-04T00:00:00',
-                'end': '2021-04-04T01:00:00',
-                'category': "catA",
-                'availability_zone': 'zone1'}
+        data = {
+            'name': 'foo',
+            'vcpu': 20,
+            'memory_mb': 30,
+            'disk_gb': 40,
+            'ephemeral_gb': 100,
+            'description': 'foobar',
+            'active': False,
+            'properties': 'foo=bar',
+            'max_length_hours': 24,
+            'slots': 7,
+            'is_public': False,
+            'extra_specs': {'foo': 'bar', 'bar': 'foo'},
+            'start': '2021-04-04T00:00:00',
+            'end': '2021-04-04T01:00:00',
+            'category': "catA",
+            'availability_zone': 'zone1',
+        }
 
         flavor = self.cs.flavors.create(**data)
         json_data = json.dumps(data)
-        self.cs.assert_called('POST', '/v1/flavors/',
-                              data=json_data)
+        self.cs.assert_called('POST', '/v1/flavors/', data=json_data)
         self.assertIsInstance(flavor, flavors.Flavor)
 
     def test_create_defaults(self):
@@ -85,17 +86,14 @@ class FlavorsTest(utils.TestCase):
             'start': None,
             'end': None,
             'category': None,
-            'availability_zone': None}
+            'availability_zone': None,
+        }
 
-        data = {'name': 'foo',
-                'vcpu': 20,
-                'memory_mb': 30,
-                'disk_gb': 40}
+        data = {'name': 'foo', 'vcpu': 20, 'memory_mb': 30, 'disk_gb': 40}
         flavor = self.cs.flavors.create(**data)
         data.update(defaults)
         json_data = json.dumps(data)
-        self.cs.assert_called('POST', '/v1/flavors/',
-                              data=json_data)
+        self.cs.assert_called('POST', '/v1/flavors/', data=json_data)
         self.assertIsInstance(flavor, flavors.Flavor)
 
     def test_delete(self):
@@ -117,7 +115,7 @@ class FlavorsTest(utils.TestCase):
         self.cs.assert_called(
             'GET',
             '/v1/flavors/123/freeslots/',
-            params={'end': datetime.date(2021, 9, 1)}
+            params={'end': datetime.date(2021, 9, 1)},
         )
 
     def test_free_slots_end_date(self):
@@ -125,7 +123,7 @@ class FlavorsTest(utils.TestCase):
         self.cs.assert_called(
             'GET',
             '/v1/flavors/123/freeslots/',
-            params={'end': datetime.date(2021, 8, 31)}
+            params={'end': datetime.date(2021, 8, 31)},
         )
 
     def test_free_slots_start(self):
@@ -133,8 +131,10 @@ class FlavorsTest(utils.TestCase):
         self.cs.assert_called(
             'GET',
             '/v1/flavors/123/freeslots/',
-            params={'start': datetime.date(2021, 7, 1),
-                    'end': datetime.date(2021, 7, 31)}
+            params={
+                'start': datetime.date(2021, 7, 1),
+                'end': datetime.date(2021, 7, 31),
+            },
         )
 
     def test_free_slots_start_date(self):
@@ -142,6 +142,8 @@ class FlavorsTest(utils.TestCase):
         self.cs.assert_called(
             'GET',
             '/v1/flavors/123/freeslots/',
-            params={'start': datetime.date(2021, 7, 1),
-                    'end': datetime.date(2021, 7, 31)}
+            params={
+                'start': datetime.date(2021, 7, 1),
+                'end': datetime.date(2021, 7, 31),
+            },
         )

@@ -17,37 +17,36 @@ from warreclient.v1 import flavors
 
 
 class Reservation(base.Resource):
-
     date_fields = ['start', 'end']
 
     def __init__(self, manager, info, loaded=False, resp=None):
-        super(Reservation, self).__init__(manager, info, loaded, resp)
+        super().__init__(manager, info, loaded, resp)
         self.flavor = flavors.Flavor(None, self.flavor, loaded=True)
 
     def __repr__(self):
-        return "<Reservation %s>" % self.id
+        return f"<Reservation {self.id}>"
 
     def to_dict(self):
-        res = super(Reservation, self).to_dict()
+        res = super().to_dict()
         res['flavor'] = res.get('flavor', {}).get('name')
         return res
 
 
 class ReservationManager(base.BasicManager):
-
     base_url = 'v1/reservations'
     resource_class = Reservation
 
     def delete(self, reservation_id):
-        return self._delete('/%s/%s/' % (self.base_url, reservation_id))
+        return self._delete(f'/{self.base_url}/{reservation_id}/')
 
     def create(self, flavor_id, start, end, instance_count=1):
-        data = {'flavor_id': flavor_id,
-                'start': start,
-                'end': end,
-                'instance_count': instance_count}
-        return self._create("/%s/" % self.base_url, data=data)
+        data = {
+            'flavor_id': flavor_id,
+            'start': start,
+            'end': end,
+            'instance_count': instance_count,
+        }
+        return self._create(f"/{self.base_url}/", data=data)
 
     def update(self, reservation_id, **kwargs):
-        return self._update('/%s/%s/' % (self.base_url, reservation_id),
-                            data=kwargs)
+        return self._update(f'/{self.base_url}/{reservation_id}/', data=kwargs)

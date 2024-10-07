@@ -20,9 +20,8 @@ from warreclient.v1 import flavorprojects
 
 
 class FlavorProjectsTest(utils.TestCase):
-
     def setUp(self):
-        super(FlavorProjectsTest, self).setUp()
+        super().setUp()
         self.cs = fakes.FakeClient()
 
     def test_flavorproject_list(self):
