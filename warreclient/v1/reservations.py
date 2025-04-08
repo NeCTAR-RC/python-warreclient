@@ -17,7 +17,7 @@ from warreclient.v1 import flavors
 
 
 class Reservation(base.Resource):
-    date_fields = ['start', 'end']
+    date_fields = ['start', 'end', 'created_at']
 
     def __init__(self, manager, info, loaded=False, resp=None):
         super().__init__(manager, info, loaded, resp)
