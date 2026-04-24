@@ -122,14 +122,14 @@ class CreateReservation(command.ShowOne):
         parser.add_argument(
             '--start',
             metavar='<start>',
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for starting the lease',
+            help='Time (YYYY-MM-DDTHH:MM:SS+00:00) for starting the lease',
             required=True,
         )
         parser.add_argument(
             '--end',
             metavar='<end>',
             required=True,
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease',
+            help='Time (YYYY-MM-DDTHH:MM:SS+00:00) for ending the lease',
         )
         parser.add_argument(
             '--instance-count',
@@ -186,7 +186,7 @@ class UpdateReservation(ReservationCommand):
         parser.add_argument(
             '--end',
             metavar='<end>',
-            help='Time (YYYY-MM-DD HH:MM) UTC TZ for ending the lease',
+            help='Time (YYYY-MM-DDTHH:MM:SS+00:00) for ending the lease',
         )
         return parser
 

@@ -175,14 +175,14 @@ class CreateFlavor(command.ShowOne):
             '--start',
             metavar='<start>',
             default=None,
-            help='Start time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+            help='Start time (YYYY-MM-DDTHH:MM:SS+00:00) of flavor. Used to '
             'restrict when a flavor can be used',
         )
         parser.add_argument(
             '--end',
             metavar='<end>',
             default=None,
-            help='End time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+            help='End time (YYYY-MM-DDTHH:MM:SS+00:00) of flavor. Used to '
             'restrict when a flavor can be used',
         )
         parser.add_argument(
@@ -286,14 +286,14 @@ class UpdateFlavor(FlavorCommand):
             '--start',
             metavar='<start>',
             default=None,
-            help='Start time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+            help='Start time (YYYY-MM-DDTHH:MM:SS+00:00) of flavor. Used to '
             'restrict when a flavor can be used',
         )
         parser.add_argument(
             '--end',
             metavar='<end>',
             default=None,
-            help='End time (YYYY-MM-DD HH:MM) UTC TZ of flavor. Used to '
+            help='End time (YYYY-MM-DDTHH:MM:SS+00:00) of flavor. Used to '
             'restrict when a flavor can be used',
         )
         parser.add_argument(
