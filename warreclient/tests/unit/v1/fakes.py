@@ -22,6 +22,7 @@ from warreclient.v1 import client
 from warreclient.v1 import flavorprojects
 from warreclient.v1 import flavors
 from warreclient.v1 import limits
+from warreclient.v1 import maintenancewindows
 from warreclient.v1 import reservations
 
 
@@ -71,6 +72,16 @@ generic_reservation = {
     "start": "2021-04-04T00:00:00",
 }
 
+generic_maintenancewindow = {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-05-02T00:00:00+00:00",
+    "note": "Planned maintenance",
+    "flavors": [
+        {"id": "d6506b62-13c2-4dec-a556-b306bb5e959f", "name": "s2.small"},
+    ],
+}
+
 generic_limits = {
     "absolute": {
         "maxHours": 49,
@@ -90,6 +101,9 @@ class FakeClient(fakes.FakeClient, client.Client):
             self.http_client
         )
         self.limits = limits.LimitsManager(self.http_client)
+        self.maintenancewindows = maintenancewindows.MaintenanceWindowManager(
+            self.http_client
+        )
         self.reservations = reservations.ReservationManager(self.http_client)
 
 
@@ -291,6 +305,27 @@ class FakeSessionClient(base_client.SessionClient):
 
     def patch_v1_reservations_123(self, data, **kw):
         return (202, {'end': '2022-01-01 12:00'}, generic_reservation)
+
+    def get_v1_maintenancewindows(self, **kw):
+        return (200, {}, [generic_maintenancewindow])
+
+    def get_v1_maintenancewindows_a1b2c3d4_e5f6_7890_abcd_ef1234567890(
+        self, **kw
+    ):
+        return (200, {}, generic_maintenancewindow)
+
+    def post_v1_maintenancewindows(self, **kw):
+        return (201, {}, generic_maintenancewindow)
+
+    def patch_v1_maintenancewindows_a1b2c3d4_e5f6_7890_abcd_ef1234567890(
+        self, data, **kw
+    ):
+        return (200, {}, generic_maintenancewindow)
+
+    def delete_v1_maintenancewindows_a1b2c3d4_e5f6_7890_abcd_ef1234567890(
+        self, **kw
+    ):
+        return (204, {}, '')
 
     def get_v1_limits(self, **kw):
         return (200, {}, generic_limits)
