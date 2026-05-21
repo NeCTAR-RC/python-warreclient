@@ -94,18 +94,37 @@ class CreateMaintenanceWindow(command.ShowOne):
             default=[],
             help='Flavor (name or ID) affected by this window (repeatable)',
         )
+        parser.add_argument(
+            '--all-active-flavors',
+            action='store_true',
+            default=False,
+            help='Apply to all currently active flavors',
+        )
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
 
-        flavor_ids = []
-        for f in parsed_args.flavors:
-            flavor = osc_utils.find_resource(
-                client.flavors, f, all_projects=True
+        if parsed_args.all_active_flavors and parsed_args.flavors:
+            raise exceptions.CommandError(
+                "Can't specify --all-active-flavors and --flavor"
             )
-            flavor_ids.append(flavor.id)
+
+        if parsed_args.all_active_flavors:
+            active_flavors = client.flavors.list(
+                active=True, all_projects=True
+            )
+            if not active_flavors:
+                raise exceptions.CommandError("No active flavors found")
+            flavor_ids = [f.id for f in active_flavors]
+        else:
+            flavor_ids = []
+            for f in parsed_args.flavors:
+                flavor = osc_utils.find_resource(
+                    client.flavors, f, all_projects=True
+                )
+                flavor_ids.append(flavor.id)
 
         window = client.maintenancewindows.create(
             start=parsed_args.start,
