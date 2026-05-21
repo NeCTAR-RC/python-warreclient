@@ -34,6 +34,10 @@ class FlavorsTest(utils.TestCase):
             self.assertIsInstance(u, flavors.Flavor)
         self.assertEqual(2, len(ul))
 
+    def test_flavor_list_active(self):
+        self.cs.flavors.list(active=True)
+        self.cs.assert_called('GET', '/v1/flavors/', params={'active': True})
+
     def test_flavor_get(self):
         u = self.cs.flavors.get(123)
         self.cs.assert_called('GET', '/v1/flavors/123/')

@@ -35,6 +35,8 @@ class ListFlavors(command.Lister):
             kwargs['category'] = parsed_args.category
         if parsed_args.availability_zone:
             kwargs['availability_zone'] = parsed_args.availability_zone
+        if parsed_args.active:
+            kwargs['active'] = True
         flavors = client.flavors.list(**kwargs)
         columns = [
             'id',
@@ -62,6 +64,12 @@ class ListFlavors(command.Lister):
         parser.add_argument('--category', help="Filter by category field")
         parser.add_argument(
             '--availability-zone', help="Filter by availability_zone field"
+        )
+        parser.add_argument(
+            '--active',
+            action='store_true',
+            default=False,
+            help="Only list active flavors (useful with --all)",
         )
         return parser
 
