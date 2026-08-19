@@ -13,21 +13,30 @@
 import itertools
 import logging
 
+from openstackclient.identity import common
 from osc_lib.command import command
 from osc_lib import utils
 
 
 class ListLimits(command.Lister):
-    """List flavors."""
+    """List limits."""
 
-    log = logging.getLogger(__name__ + '.ListFlavors')
+    log = logging.getLogger(__name__ + '.ListLimits')
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)', parsed_args)
         client = self.app.client_manager.warre
         kwargs = {}
-        if parsed_args.project_id:
-            kwargs['project_id'] = parsed_args.project_id
+        if parsed_args.project:
+            identity_client = self.app.client_manager.identity
+            project = common.find_project(
+                identity_client,
+                common._get_token_resource(
+                    identity_client, 'project', parsed_args.project
+                ),
+                parsed_args.project_domain,
+            )
+            kwargs['project_id'] = project.id
         limits = client.limits.get(**kwargs)
         columns = ["Name", "Value"]
         return (
@@ -41,6 +50,16 @@ class ListLimits(command.Lister):
     def get_parser(self, prog_name):
         parser = super().get_parser(prog_name)
         parser.add_argument(
-            '--project-id', help="List limits for project_id (admin only)"
+            '--project',
+            '--project-id',
+            dest='project',
+            metavar='<project>',
+            help="List limits for project (name or ID) (admin only)",
+        )
+        parser.add_argument(
+            '--project-domain',
+            default='default',
+            metavar='<project_domain>',
+            help='Project domain (name or ID)',
         )
         return parser
