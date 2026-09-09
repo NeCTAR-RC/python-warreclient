@@ -13,9 +13,10 @@
 import re
 from unittest import mock
 
+from urllib import parse
+
 from nectarclient_lib.tests.unit import fakes
 from nectarclient_lib.tests.unit import utils
-from six.moves.urllib import parse
 
 from warreclient import client as base_client
 from warreclient.v1 import client
